@@ -1,0 +1,81 @@
+.anim-panel {
+  position: fixed;
+  top: -1px;
+  right: 20px;
+  width: 300px;
+  height: 132px;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);
+  padding-left: 40px;
+  font-family: "Menlo", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  font-size: 12px;
+}
+
+.anim-panel .js-slider {
+  margin-top: 8px;
+}
+
+
+/* Controls */
+
+.anim-panel__control-set {
+  position: absolute;
+  border-right: 1px solid #ddd;
+  width: 40px;
+  top: 0;
+  left: 0;
+}
+
+.anim-panel__control-button {
+  width: 100%;
+  padding: 15px 0;
+  text-align: center;
+  cursor: pointer;
+  margin: 0;
+}
+
+.anim-panel__control-button:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+
+/* Time Scale */
+
+.anim-panel__timescale-set {
+  border-bottom: 1px solid #ddd;
+}
+
+.anim-panel__timescale-button {
+  margin: 0;
+  display: inline-block;
+  padding: 15px 0;
+  text-align: center;
+  margin-right: -4px;
+  width: 24.2%;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.anim-panel__timescale-button + .anim-panel__timescale-button {
+  border-left: 1px solid #ddd;
+}
+
+.anim-panel__timescale-button:hover {
+  color: #000;
+}
+
+.anim-panel__timescale-button.is-active {
+  color: #000;
+}
+
+
+/* Labels */
+
+.anim-panel__labels {
+  padding: 13px 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.anim-panel__labels > button + button {
+  margin-left: 8px;
+}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<title>Anim Panel Example</title>
+<style>
+  body {
+    overflow: hidden;
+  }
+  
+  .container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    height: 120px;
+    text-align: center;
+  }
+
+  .container > * {
+    display: inline-block;
+    margin: 0 10px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="circle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="117.2857" height="117.2857" viewBox="0 0 117.2857 117.2857"><title>circle</title><circle cx="58.6429" cy="58.6429" r="57.1429" style="fill:none;stroke:#ff4276;stroke-miterlimit:10;stroke-width:3px"/></svg>
+    </div>
+    <div id="square">
+      <svg xmlns="http://www.w3.org/2000/svg" width="112.7143" height="112.7143" viewBox="0 0 112.7143 112.7143"><title>square</title><rect x="1.5" y="1.5" width="109.7143" height="109.7143" style="fill:none;stroke:#00f0b8;stroke-miterlimit:10;stroke-width:3px"/></svg>
+    </div>
+    <div id="triangle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="133.5161" height="115.6284" viewBox="0 0 133.5161 115.6284"><title>triangle</title><polygon points="66.758 3 130.918 114.128 2.598 114.128 66.758 3" style="fill:none;stroke:#7973f0;stroke-miterlimit:10;stroke-width:3px"/></svg>
+    </div>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
+  <script src="../anim_panel.js"></script>
+  <script src="example.js"></script>
+</body>
+</html>
