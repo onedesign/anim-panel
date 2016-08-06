@@ -1,5 +1,5 @@
 var styles = require('css!./main.css');
-var sliderStyles = require('css!nouislider/distribute/nouislider.min.css');
+var sliderStyles = require('css!./no-ui-slider.css');
 var markup = require("html!./index.html");
 var noUiSlider = require('noUiSlider');
 
