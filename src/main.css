@@ -90,3 +90,12 @@
 .anim-panel__labels > button + button {
   margin-left: 8px;
 }
+
+
+/* Slider */
+
+.anim-panel__slider {
+  margin: 15px 13px 0;
+  position: relative;
+  top: 3px;
+}

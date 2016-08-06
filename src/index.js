@@ -1,4 +1,5 @@
 var styles = require('css!./main.css');
+var sliderStyles = require('css!nouislider/distribute/nouislider.min.css');
 var markup = require("html!./index.html");
 var noUiSlider = require('noUiSlider');
 
@@ -27,7 +28,8 @@ module.exports = function(timeline, options) {
         restartSelector: '.js-restart',
         timescaleSelector: '.js-timescale',
         activeTimescaleClass: 'is-active',
-        labelsSelector: '.js-anim-panel-labels'
+        labelsSelector: '.js-anim-panel-labels',
+        shouldUpdateSliderFromTimeline: true
       };
      
      
@@ -76,8 +78,10 @@ module.exports = function(timeline, options) {
         style.type = 'text/css';
         if (style.styleSheet){
           style.styleSheet.cssText += styles;
+          style.styleSheet.cssText += sliderStyles;
         } else {
           style.appendChild(document.createTextNode(styles));
+          style.appendChild(document.createTextNode(sliderStyles));
         }
 
         head.appendChild(style);
@@ -85,6 +89,7 @@ module.exports = function(timeline, options) {
 
       var _addSlider = function() {
         self.sliderEl = document.querySelector(self.sliderSelector);
+
         noUiSlider.create(self.sliderEl, {
           start: [0],
           range: {
@@ -95,23 +100,25 @@ module.exports = function(timeline, options) {
 
         // Stop updating based on timeline position as we drag the slider
         self.sliderEl.noUiSlider.on('start', () => {
-          _startUpdatingSlider();
+          _startUpdatingTimelineFromSlider();
+          self.shouldUpdateSliderFromTimeline = false;
           timeline.pause();
         });
 
         // Start updating again on drag end
         self.sliderEl.noUiSlider.on('end', () => {
-          _stopUpdatingSlider();
+          _stopUpdatingTimelineFromSlider();
+          self.shouldUpdateSliderFromTimeline = true;
         });
       };
 
-      var _startUpdatingSlider = function() {
+      var _startUpdatingTimelineFromSlider = function() {
         self.sliderEl.noUiSlider.on('slide', (values, handle) => {
           timeline.progress(values[0] / 100).pause();
         });
       };
 
-      var _stopUpdatingSlider = function() {
+      var _stopUpdatingTimelineFromSlider = function() {
         self.sliderEl.noUiSlider.off('slide');
       };
 
@@ -171,6 +178,8 @@ module.exports = function(timeline, options) {
       };
 
       var _updateSlider = function() {
+        if (!self.shouldUpdateSliderFromTimeline) return;
+
         var progress = timeline.progress() * 100;
         self.sliderEl.noUiSlider.set(progress);
 

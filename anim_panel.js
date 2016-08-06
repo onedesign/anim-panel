@@ -55,6 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var styles = __webpack_require__(1);
+	var sliderStyles = __webpack_require__(5);
 	var markup = __webpack_require__(3);
 	var noUiSlider = __webpack_require__(4);
 
@@ -83,7 +84,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        restartSelector: '.js-restart',
 	        timescaleSelector: '.js-timescale',
 	        activeTimescaleClass: 'is-active',
-	        labelsSelector: '.js-anim-panel-labels'
+	        labelsSelector: '.js-anim-panel-labels',
+	        shouldUpdateSliderFromTimeline: true
 	      };
 	     
 	     
@@ -132,8 +134,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        style.type = 'text/css';
 	        if (style.styleSheet){
 	          style.styleSheet.cssText += styles;
+	          style.styleSheet.cssText += sliderStyles;
 	        } else {
 	          style.appendChild(document.createTextNode(styles));
+	          style.appendChild(document.createTextNode(sliderStyles));
 	        }
 
 	        head.appendChild(style);
@@ -141,6 +145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var _addSlider = function() {
 	        self.sliderEl = document.querySelector(self.sliderSelector);
+
 	        noUiSlider.create(self.sliderEl, {
 	          start: [0],
 	          range: {
@@ -151,23 +156,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // Stop updating based on timeline position as we drag the slider
 	        self.sliderEl.noUiSlider.on('start', () => {
-	          _startUpdatingSlider();
+	          _startUpdatingTimelineFromSlider();
+	          self.shouldUpdateSliderFromTimeline = false;
 	          timeline.pause();
 	        });
 
 	        // Start updating again on drag end
 	        self.sliderEl.noUiSlider.on('end', () => {
-	          _stopUpdatingSlider();
+	          _stopUpdatingTimelineFromSlider();
+	          self.shouldUpdateSliderFromTimeline = true;
 	        });
 	      };
 
-	      var _startUpdatingSlider = function() {
+	      var _startUpdatingTimelineFromSlider = function() {
 	        self.sliderEl.noUiSlider.on('slide', (values, handle) => {
 	          timeline.progress(values[0] / 100).pause();
 	        });
 	      };
 
-	      var _stopUpdatingSlider = function() {
+	      var _stopUpdatingTimelineFromSlider = function() {
 	        self.sliderEl.noUiSlider.off('slide');
 	      };
 
@@ -227,6 +234,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      var _updateSlider = function() {
+	        if (!self.shouldUpdateSliderFromTimeline) return;
+
 	        var progress = timeline.progress() * 100;
 	        self.sliderEl.noUiSlider.set(progress);
 
@@ -279,7 +288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  right: 20px;\n  width: 300px;\n  min-height: 132px;\n  background-color: rgba(255, 255, 255, 0.85);\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);\n  padding-left: 40px;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 12px;\n}\n\n.anim-panel .js-slider {\n  margin-top: 8px;\n}\n\n\n/* Controls */\n\n.anim-panel__control-set {\n  position: absolute;\n  border-right: 1px solid #ddd;\n  width: 40px;\n  top: 0;\n  left: 0;\n  height: 100%;\n}\n\n.anim-panel__control-button {\n  width: 100%;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n}\n\n.anim-panel__control-button:hover {\n  background-color: rgba(0, 0, 0, 0.03);\n}\n\n\n/* Time Scale */\n\n.anim-panel__timescale-set {\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button {\n  margin: 0;\n  display: inline-block;\n  padding: 15px 0;\n  text-align: center;\n  margin-right: -4px;\n  width: 24.2%;\n  cursor: pointer;\n  color: #aaa;\n}\n\n.anim-panel__timescale-button + .anim-panel__timescale-button {\n  border-left: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button:hover {\n  color: #000;\n}\n\n.anim-panel__timescale-button.is-active {\n  color: #000;\n}\n\n\n/* Labels */\n\n.anim-panel__labels {\n  padding: 13px 12px;\n  padding-top: 0;\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__labels > p {\n  margin-bottom: 0;\n  color: #aaa;\n}\n\n.anim-panel__labels > button {\n  margin-top: 13px;\n}\n\n.anim-panel__labels > button + button {\n  margin-left: 8px;\n}", ""]);
+	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  right: 20px;\n  width: 300px;\n  min-height: 132px;\n  background-color: rgba(255, 255, 255, 0.85);\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);\n  padding-left: 40px;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 12px;\n}\n\n.anim-panel .js-slider {\n  margin-top: 8px;\n}\n\n\n/* Controls */\n\n.anim-panel__control-set {\n  position: absolute;\n  border-right: 1px solid #ddd;\n  width: 40px;\n  top: 0;\n  left: 0;\n  height: 100%;\n}\n\n.anim-panel__control-button {\n  width: 100%;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n}\n\n.anim-panel__control-button:hover {\n  background-color: rgba(0, 0, 0, 0.03);\n}\n\n\n/* Time Scale */\n\n.anim-panel__timescale-set {\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button {\n  margin: 0;\n  display: inline-block;\n  padding: 15px 0;\n  text-align: center;\n  margin-right: -4px;\n  width: 24.2%;\n  cursor: pointer;\n  color: #aaa;\n}\n\n.anim-panel__timescale-button + .anim-panel__timescale-button {\n  border-left: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button:hover {\n  color: #000;\n}\n\n.anim-panel__timescale-button.is-active {\n  color: #000;\n}\n\n\n/* Labels */\n\n.anim-panel__labels {\n  padding: 13px 12px;\n  padding-top: 0;\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__labels > p {\n  margin-bottom: 0;\n  color: #aaa;\n}\n\n.anim-panel__labels > button {\n  margin-top: 13px;\n}\n\n.anim-panel__labels > button + button {\n  margin-left: 8px;\n}\n\n\n/* Slider */\n\n.anim-panel__slider {\n  margin: 15px 13px 0;\n  position: relative;\n  top: 3px;\n}", ""]);
 
 	// exports
 
@@ -344,7 +353,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__control-button js-play\" title=\"Play\">&gt;</p>\n  <p class=\"anim-panel__control-button js-pause\" title=\"Pause\">||</p>\n  <p class=\"anim-panel__control-button js-restart\" title=\"Restart\">&lt;</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels js-anim-panel-labels\"></div>\n<div class=\"js-slider\"></div>\n";
+	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__control-button js-play\" title=\"Play\">&gt;</p>\n  <p class=\"anim-panel__control-button js-pause\" title=\"Pause\">||</p>\n  <p class=\"anim-panel__control-button js-restart\" title=\"Restart\">&lt;</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels js-anim-panel-labels\"></div>\n<div class=\"anim-panel__slider js-slider\"></div>\n";
 
 /***/ },
 /* 4 */
@@ -2309,6 +2318,20 @@ return /******/ (function(modules) { // webpackBootstrap
 		};
 
 	}));
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(2)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "/*! nouislider - 8.5.1 - 2016-04-24 16:00:30 */\r\n\r\n\r\n.noUi-target,.noUi-target *{-webkit-touch-callout:none;-webkit-user-select:none;-ms-touch-action:none;touch-action:none;-ms-user-select:none;-moz-user-select:none;user-select:none;-moz-box-sizing:border-box;box-sizing:border-box}.noUi-target{position:relative;direction:ltr}.noUi-base{width:100%;height:100%;position:relative;z-index:1}.noUi-origin{position:absolute;right:0;top:0;left:0;bottom:0}.noUi-handle{position:relative;z-index:1}.noUi-stacking .noUi-handle{z-index:10}.noUi-state-tap .noUi-origin{-webkit-transition:left .3s,top .3s;transition:left .3s,top .3s}.noUi-state-drag *{cursor:inherit!important}.noUi-base,.noUi-handle{-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}.noUi-horizontal{height:18px}.noUi-horizontal .noUi-handle{width:34px;height:28px;left:-17px;top:-6px}.noUi-vertical{width:18px}.noUi-vertical .noUi-handle{width:28px;height:34px;left:-6px;top:-17px}.noUi-background{background:#FAFAFA;box-shadow:inset 0 1px 1px #f0f0f0}.noUi-connect{background:#3FB8AF;box-shadow:inset 0 0 3px rgba(51,51,51,.45);-webkit-transition:background 450ms;transition:background 450ms}.noUi-origin{border-radius:2px}.noUi-target{border-radius:4px;border:1px solid #D3D3D3;box-shadow:inset 0 1px 1px #F0F0F0,0 3px 6px -5px #BBB}.noUi-target.noUi-connect{box-shadow:inset 0 0 3px rgba(51,51,51,.45),0 3px 6px -5px #BBB}.noUi-draggable{cursor:w-resize}.noUi-vertical .noUi-draggable{cursor:n-resize}.noUi-handle{border:1px solid #D9D9D9;border-radius:3px;background:#FFF;cursor:default;box-shadow:inset 0 0 1px #FFF,inset 0 1px 7px #EBEBEB,0 3px 6px -3px #BBB}.noUi-active{box-shadow:inset 0 0 1px #FFF,inset 0 1px 7px #DDD,0 3px 6px -3px #BBB}.noUi-handle:after,.noUi-handle:before{content:\"\";display:block;position:absolute;height:14px;width:1px;background:#E8E7E6;left:14px;top:6px}.noUi-handle:after{left:17px}.noUi-vertical .noUi-handle:after,.noUi-vertical .noUi-handle:before{width:14px;height:1px;left:6px;top:14px}.noUi-vertical .noUi-handle:after{top:17px}[disabled] .noUi-connect,[disabled].noUi-connect{background:#B8B8B8}[disabled] .noUi-handle,[disabled].noUi-origin{cursor:not-allowed}.noUi-pips,.noUi-pips *{-moz-box-sizing:border-box;box-sizing:border-box}.noUi-pips{position:absolute;color:#999}.noUi-value{position:absolute;text-align:center}.noUi-value-sub{color:#ccc;font-size:10px}.noUi-marker{position:absolute;background:#CCC}.noUi-marker-large,.noUi-marker-sub{background:#AAA}.noUi-pips-horizontal{padding:10px 0;height:80px;top:100%;left:0;width:100%}.noUi-value-horizontal{-webkit-transform:translate3d(-50%,50%,0);transform:translate3d(-50%,50%,0)}.noUi-marker-horizontal.noUi-marker{margin-left:-1px;width:2px;height:5px}.noUi-marker-horizontal.noUi-marker-sub{height:10px}.noUi-marker-horizontal.noUi-marker-large{height:15px}.noUi-pips-vertical{padding:0 10px;height:100%;top:0;left:100%}.noUi-value-vertical{-webkit-transform:translate3d(0,-50%,0);transform:translate3d(0,-50%,0);padding-left:25px}.noUi-marker-vertical.noUi-marker{width:5px;height:2px;margin-top:-1px}.noUi-marker-vertical.noUi-marker-sub{width:10px}.noUi-marker-vertical.noUi-marker-large{width:15px}.noUi-tooltip{display:block;position:absolute;border:1px solid #D9D9D9;border-radius:3px;background:#fff;padding:5px;text-align:center}.noUi-horizontal .noUi-handle-lower .noUi-tooltip{top:-32px}.noUi-horizontal .noUi-handle-upper .noUi-tooltip{bottom:-32px}.noUi-vertical .noUi-handle-lower .noUi-tooltip{left:120%}.noUi-vertical .noUi-handle-upper .noUi-tooltip{right:120%}", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ])
