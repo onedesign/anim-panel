@@ -344,7 +344,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__control-button js-play\">&gt;</p>\n  <p class=\"anim-panel__control-button js-pause\">||</p>\n  <p class=\"anim-panel__control-button js-restart\">&lt;</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels js-anim-panel-labels\"></div>\n<div class=\"js-slider\"></div>\n";
+	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__control-button js-play\" title=\"Play\">&gt;</p>\n  <p class=\"anim-panel__control-button js-pause\" title=\"Pause\">||</p>\n  <p class=\"anim-panel__control-button js-restart\" title=\"Restart\">&lt;</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels js-anim-panel-labels\"></div>\n<div class=\"js-slider\"></div>\n";
 
 /***/ },
 /* 4 */
