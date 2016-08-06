@@ -41,5 +41,5 @@ tl.addLabel('outro')
   }, 'outro+=1');
 
 new AnimPanel(tl, {
-  consoleTime: false
+  
 });

@@ -9,9 +9,6 @@ module.exports = function(timeline, options) {
       timeline            The TimelineLite/TimelineMax object 
                           to be controlled
                           [TimelineLite/TimelineMax] (required)
-      consoleTime         Determines whether the current timeline time
-                          is output in the console each tick
-                          [Boolean false] (optional)
       */
      
       //
@@ -29,6 +26,7 @@ module.exports = function(timeline, options) {
         timescaleSelector: '.js-timescale',
         activeTimescaleClass: 'is-active',
         labelsSelector: '.js-anim-panel-labels',
+        timeSelector: '.js-time',
         shouldUpdateSliderFromTimeline: true
       };
      
@@ -161,7 +159,7 @@ module.exports = function(timeline, options) {
         });
 
         // Listen for the playhead to change
-        timeline.eventCallback('onUpdate', _updateSlider.bind(self))
+        timeline.eventCallback('onUpdate', _onTimelineUpdate.bind(self))
       };
 
       var _play = function(evt) {
@@ -177,17 +175,20 @@ module.exports = function(timeline, options) {
         timeline.restart();
       };
 
-      var _updateSlider = function() {
-        if (!self.shouldUpdateSliderFromTimeline) return;
+      var _onTimelineUpdate = function() {
+        // Update the displayed time
+        _updateTime(timeline.totalTime());
 
+        // Update slider based on timeline
+        if (!self.shouldUpdateSliderFromTimeline) return;
         var progress = timeline.progress() * 100;
         self.sliderEl.noUiSlider.set(progress);
+      };
 
-        // Output console time
-        if (self.settings.consoleTime) {
-          console.clear();
-          console.log('Total Time', timeline.totalTime());
-        }
+      var _updateTime = function(timelineTime) {
+        var timeEl = document.querySelector(self.timeSelector);
+        var roundedTime = Math.round(timelineTime * 100) / 100
+        timeEl.innerHTML = roundedTime;
       };
 
       var _updateTimescale = function(selectedTimescale, timescale) {

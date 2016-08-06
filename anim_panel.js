@@ -65,9 +65,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      timeline            The TimelineLite/TimelineMax object 
 	                          to be controlled
 	                          [TimelineLite/TimelineMax] (required)
-	      consoleTime         Determines whether the current timeline time
-	                          is output in the console each tick
-	                          [Boolean false] (optional)
 	      */
 	     
 	      //
@@ -85,6 +82,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        timescaleSelector: '.js-timescale',
 	        activeTimescaleClass: 'is-active',
 	        labelsSelector: '.js-anim-panel-labels',
+	        timeSelector: '.js-time',
 	        shouldUpdateSliderFromTimeline: true
 	      };
 	     
@@ -217,7 +215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 
 	        // Listen for the playhead to change
-	        timeline.eventCallback('onUpdate', _updateSlider.bind(self))
+	        timeline.eventCallback('onUpdate', _onTimelineUpdate.bind(self))
 	      };
 
 	      var _play = function(evt) {
@@ -233,17 +231,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        timeline.restart();
 	      };
 
-	      var _updateSlider = function() {
-	        if (!self.shouldUpdateSliderFromTimeline) return;
+	      var _onTimelineUpdate = function() {
+	        // Update the displayed time
+	        _updateTime(timeline.totalTime());
 
+	        // Update slider based on timeline
+	        if (!self.shouldUpdateSliderFromTimeline) return;
 	        var progress = timeline.progress() * 100;
 	        self.sliderEl.noUiSlider.set(progress);
+	      };
 
-	        // Output console time
-	        if (self.settings.consoleTime) {
-	          console.clear();
-	          console.log('Total Time', timeline.totalTime());
-	        }
+	      var _updateTime = function(timelineTime) {
+	        var timeEl = document.querySelector(self.timeSelector);
+	        var roundedTime = Math.round(timelineTime * 100) / 100
+	        timeEl.innerHTML = roundedTime;
 	      };
 
 	      var _updateTimescale = function(selectedTimescale, timescale) {
@@ -288,7 +289,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  right: 20px;\n  width: 300px;\n  min-height: 132px;\n  background-color: rgba(255, 255, 255, 0.85);\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);\n  padding-left: 40px;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 12px;\n}\n\n.anim-panel .js-slider {\n  margin-top: 8px;\n}\n\n\n/* Controls */\n\n.anim-panel__control-set {\n  position: absolute;\n  border-right: 1px solid #ddd;\n  width: 40px;\n  top: 0;\n  left: 0;\n  height: 100%;\n}\n\n.anim-panel__control-button {\n  width: 100%;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n}\n\n.anim-panel__control-button:hover {\n  background-color: rgba(0, 0, 0, 0.03);\n}\n\n\n/* Time Scale */\n\n.anim-panel__timescale-set {\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button {\n  margin: 0;\n  display: inline-block;\n  padding: 15px 0;\n  text-align: center;\n  margin-right: -4px;\n  width: 24.2%;\n  cursor: pointer;\n  color: #aaa;\n}\n\n.anim-panel__timescale-button + .anim-panel__timescale-button {\n  border-left: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button:hover {\n  color: #000;\n}\n\n.anim-panel__timescale-button.is-active {\n  color: #000;\n}\n\n\n/* Labels */\n\n.anim-panel__labels {\n  padding: 13px 12px;\n  padding-top: 0;\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__labels > p {\n  margin-bottom: 0;\n  color: #aaa;\n}\n\n.anim-panel__labels > button {\n  margin-top: 13px;\n}\n\n.anim-panel__labels > button + button {\n  margin-left: 8px;\n}\n\n\n/* Slider */\n\n.anim-panel__slider {\n  margin: 15px 13px 0;\n  position: relative;\n  top: 8px;\n}", ""]);
+	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  right: 20px;\n  width: 300px;\n  min-height: 132px;\n  background-color: rgba(255, 255, 255, 0.85);\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);\n  padding-left: 40px;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 12px;\n}\n\n.anim-panel .js-slider {\n  margin-top: 8px;\n}\n\n\n/* Controls */\n\n.anim-panel__control-set {\n  position: absolute;\n  border-right: 1px solid #ddd;\n  width: 40px;\n  top: 0;\n  left: 0;\n  height: 100%;\n}\n\n.anim-panel__control-button {\n  width: 100%;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n}\n\n.anim-panel__control-button:hover {\n  background-color: rgba(0, 0, 0, 0.03);\n}\n\n\n/* Time Scale */\n\n.anim-panel__timescale-set {\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button {\n  margin: 0;\n  display: inline-block;\n  padding: 15px 0;\n  text-align: center;\n  margin-right: -4px;\n  width: 24.2%;\n  cursor: pointer;\n  color: #aaa;\n}\n\n.anim-panel__timescale-button + .anim-panel__timescale-button {\n  border-left: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button:hover {\n  color: #000;\n}\n\n.anim-panel__timescale-button.is-active {\n  color: #000;\n}\n\n\n/* Labels */\n\n.anim-panel__labels {\n  padding: 13px 12px;\n  padding-top: 0;\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__labels > p {\n  margin-bottom: 0;\n  color: #aaa;\n}\n\n.anim-panel__labels > button {\n  margin-top: 13px;\n}\n\n.anim-panel__labels > button + button {\n  margin-left: 8px;\n}\n\n\n/* Slider */\n\n.anim-panel__slider-set {\n  position: relative;\n  padding-right: 60px;\n  height: 42px;\n}\n\n.anim-panel__slider-set-slider {\n  padding: 8px 15px 0;\n}\n\n.anim-panel__slider-set-time {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 100%;\n  border-left: 1px solid #ddd;\n  width: 60px;\n  margin: 0;\n}\n\n.anim-panel__slider-set-time > p {\n  margin: 0;\n  margin-top: 14px;\n  margin-left: 9px;\n}", ""]);
 
 	// exports
 
@@ -353,7 +354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__control-button js-play\" title=\"Play\">&gt;</p>\n  <p class=\"anim-panel__control-button js-pause\" title=\"Pause\">||</p>\n  <p class=\"anim-panel__control-button js-restart\" title=\"Restart\">&lt;</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels js-anim-panel-labels\"></div>\n<div class=\"anim-panel__slider js-slider\"></div>\n";
+	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__control-button js-play\" title=\"Play\">&gt;</p>\n  <p class=\"anim-panel__control-button js-pause\" title=\"Pause\">||</p>\n  <p class=\"anim-panel__control-button js-restart\" title=\"Restart\">&lt;</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels js-anim-panel-labels\"></div>\n\n<div class=\"anim-panel__slider-set\">\n  <div class=\"anim-panel__slider-set-slider\">\n    <div class=\"js-slider\"></div>\n  </div>\n\n  <div class=\"anim-panel__slider-set-time\">\n    <p class=\"js-time\">0</p>\n  </div>\n</div>\n";
 
 /***/ },
 /* 4 */
