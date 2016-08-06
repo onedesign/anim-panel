@@ -19,7 +19,15 @@ module.exports = function(timeline, options) {
       //////////////////////////////////////////////////////////////////////
      
       var self = {
-        
+        animPanelBaseClass: 'anim-panel',
+        sliderSelector: '.js-slider',
+        timelineTimeDataAttr: 'data-timeline-time',
+        playSelector: '.js-play',
+        pauseSelector: '.js-pause',
+        restartSelector: '.js-restart',
+        timescaleSelector: '.js-timescale',
+        activeTimescaleClass: 'is-active',
+        labelsSelector: '.js-anim-panel-labels'
       };
      
      
@@ -56,7 +64,7 @@ module.exports = function(timeline, options) {
 
       var _appendPanel = function() {
         var div = document.createElement('div');
-        div.className += 'anim-panel';
+        div.className += self.animPanelBaseClass;
         div.innerHTML = markup;
         document.getElementsByTagName('body')[0].appendChild(div);
       };
@@ -76,7 +84,7 @@ module.exports = function(timeline, options) {
       };
 
       var _addSlider = function() {
-        self.sliderEl = document.querySelector('.js-slider');
+        self.sliderEl = document.querySelector(self.sliderSelector);
         noUiSlider.create(self.sliderEl, {
           start: [0],
           range: {
@@ -109,12 +117,12 @@ module.exports = function(timeline, options) {
 
       var _addLabelButtons = function() {
         var labels = timeline.getLabelsArray();
-        var labelContainer = document.querySelector('.js-anim-panel-labels');
+        var labelContainer = document.querySelector(self.labelsSelector);
 
         labels.forEach(function(label, idx) {
           var labelButton = document.createElement('button');
           labelButton.setAttribute('type', 'button');
-          labelButton.setAttribute('data-timeline-time', label.time);
+          labelButton.setAttribute(self.timelineTimeDataAttr, label.time);
           labelButton.innerHTML = label.name;
           labelContainer.appendChild(labelButton);
           labelButton.addEventListener('click', function(evt) {
@@ -124,12 +132,12 @@ module.exports = function(timeline, options) {
       };
      
       var _addEventListeners = function() {
-        document.querySelector('.js-play').addEventListener('click', _play.bind(self));
-        document.querySelector('.js-pause').addEventListener('click', _pause.bind(self));
-        document.querySelector('.js-restart').addEventListener('click', _restart.bind(self));
-        document.querySelectorAll('.js-timescale').forEach(function(timescaleLink) {
+        document.querySelector(self.playSelector).addEventListener('click', _play.bind(self));
+        document.querySelector(self.pauseSelector).addEventListener('click', _pause.bind(self));
+        document.querySelector(self.restartSelector).addEventListener('click', _restart.bind(self));
+        document.querySelectorAll(self.timescaleSelector).forEach(function(timescaleLink) {
           var timescale = timescaleLink.getAttribute('data-timescale');
-          timescaleLink.addEventListener('click', _updateTimescale.bind(self, timescale));
+          timescaleLink.addEventListener('click', _updateTimescale.bind(self, timescaleLink, timescale));
         });
 
         // Listen for the playhead to change
@@ -160,10 +168,13 @@ module.exports = function(timeline, options) {
         }
       };
 
-      var _updateTimescale = function(timescale) {
+      var _updateTimescale = function(selectedTimescale, timescale) {
+        var timescaleItems = document.querySelectorAll(self.timescaleSelector);
+        timescaleItems.forEach(function(item) {
+          item.classList.remove(self.activeTimescaleClass);
+        });
+        selectedTimescale.classList.add(self.activeTimescaleClass)
         timeline.timeScale(timescale).play();
-        // $('.js-timescale').removeClass('is-active');
-        // clicked.addClass('is-active');
       };
      
      

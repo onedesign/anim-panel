@@ -75,7 +75,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      //////////////////////////////////////////////////////////////////////
 	     
 	      var self = {
-	        
+	        animPanelBaseClass: 'anim-panel',
+	        sliderSelector: '.js-slider',
+	        timelineTimeDataAttr: 'data-timeline-time',
+	        playSelector: '.js-play',
+	        pauseSelector: '.js-pause',
+	        restartSelector: '.js-restart',
+	        timescaleSelector: '.js-timescale',
+	        activeTimescaleClass: 'is-active',
+	        labelsSelector: '.js-anim-panel-labels'
 	      };
 	     
 	     
@@ -112,7 +120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var _appendPanel = function() {
 	        var div = document.createElement('div');
-	        div.className += 'anim-panel';
+	        div.className += self.animPanelBaseClass;
 	        div.innerHTML = markup;
 	        document.getElementsByTagName('body')[0].appendChild(div);
 	      };
@@ -132,7 +140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      var _addSlider = function() {
-	        self.sliderEl = document.querySelector('.js-slider');
+	        self.sliderEl = document.querySelector(self.sliderSelector);
 	        noUiSlider.create(self.sliderEl, {
 	          start: [0],
 	          range: {
@@ -165,12 +173,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var _addLabelButtons = function() {
 	        var labels = timeline.getLabelsArray();
-	        var labelContainer = document.querySelector('.js-anim-panel-labels');
+	        var labelContainer = document.querySelector(self.labelsSelector);
 
 	        labels.forEach(function(label, idx) {
 	          var labelButton = document.createElement('button');
 	          labelButton.setAttribute('type', 'button');
-	          labelButton.setAttribute('data-timeline-time', label.time);
+	          labelButton.setAttribute(self.timelineTimeDataAttr, label.time);
 	          labelButton.innerHTML = label.name;
 	          labelContainer.appendChild(labelButton);
 	          labelButton.addEventListener('click', function(evt) {
@@ -180,12 +188,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 	     
 	      var _addEventListeners = function() {
-	        document.querySelector('.js-play').addEventListener('click', _play.bind(self));
-	        document.querySelector('.js-pause').addEventListener('click', _pause.bind(self));
-	        document.querySelector('.js-restart').addEventListener('click', _restart.bind(self));
-	        document.querySelectorAll('.js-timescale').forEach(function(timescaleLink) {
+	        document.querySelector(self.playSelector).addEventListener('click', _play.bind(self));
+	        document.querySelector(self.pauseSelector).addEventListener('click', _pause.bind(self));
+	        document.querySelector(self.restartSelector).addEventListener('click', _restart.bind(self));
+	        document.querySelectorAll(self.timescaleSelector).forEach(function(timescaleLink) {
 	          var timescale = timescaleLink.getAttribute('data-timescale');
-	          timescaleLink.addEventListener('click', _updateTimescale.bind(self, timescale));
+	          timescaleLink.addEventListener('click', _updateTimescale.bind(self, timescaleLink, timescale));
 	        });
 
 	        // Listen for the playhead to change
@@ -216,10 +224,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      };
 
-	      var _updateTimescale = function(timescale) {
+	      var _updateTimescale = function(selectedTimescale, timescale) {
+	        var timescaleItems = document.querySelectorAll(self.timescaleSelector);
+	        timescaleItems.forEach(function(item) {
+	          item.classList.remove(self.activeTimescaleClass);
+	        });
+	        selectedTimescale.classList.add(self.activeTimescaleClass)
 	        timeline.timeScale(timescale).play();
-	        // $('.js-timescale').removeClass('is-active');
-	        // clicked.addClass('is-active');
 	      };
 	     
 	     
@@ -255,7 +266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  right: 20px;\n  width: 300px;\n  height: 132px;\n  background-color: rgba(255, 255, 255, 0.85);\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);\n  padding-left: 40px;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 12px;\n}\n\n.anim-panel .js-slider {\n  margin-top: 8px;\n}\n\n\n/* Controls */\n\n.anim-panel__control-set {\n  position: absolute;\n  border-right: 1px solid #ddd;\n  width: 40px;\n  top: 0;\n  left: 0;\n}\n\n.anim-panel__control-button {\n  width: 100%;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n}\n\n.anim-panel__control-button:hover {\n  background-color: rgba(0, 0, 0, 0.03);\n}\n\n\n/* Time Scale */\n\n.anim-panel__timescale-set {\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button {\n  margin: 0;\n  display: inline-block;\n  padding: 15px 0;\n  text-align: center;\n  margin-right: -4px;\n  width: 24.2%;\n  cursor: pointer;\n  color: #aaa;\n}\n\n.anim-panel__timescale-button + .anim-panel__timescale-button {\n  border-left: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button:hover {\n  color: #000;\n}\n\n.anim-panel__timescale-button.is-active {\n  color: #000;\n}\n\n\n/* Labels */\n\n.anim-panel__labels {\n  padding: 13px 12px;\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__labels > button + button {\n  margin-left: 8px;\n}", ""]);
+	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  right: 20px;\n  width: 300px;\n  min-height: 132px;\n  background-color: rgba(255, 255, 255, 0.85);\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);\n  padding-left: 40px;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 12px;\n}\n\n.anim-panel .js-slider {\n  margin-top: 8px;\n}\n\n\n/* Controls */\n\n.anim-panel__control-set {\n  position: absolute;\n  border-right: 1px solid #ddd;\n  width: 40px;\n  top: 0;\n  left: 0;\n  height: 100%;\n}\n\n.anim-panel__control-button {\n  width: 100%;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n}\n\n.anim-panel__control-button:hover {\n  background-color: rgba(0, 0, 0, 0.03);\n}\n\n\n/* Time Scale */\n\n.anim-panel__timescale-set {\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button {\n  margin: 0;\n  display: inline-block;\n  padding: 15px 0;\n  text-align: center;\n  margin-right: -4px;\n  width: 24.2%;\n  cursor: pointer;\n  color: #aaa;\n}\n\n.anim-panel__timescale-button + .anim-panel__timescale-button {\n  border-left: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button:hover {\n  color: #000;\n}\n\n.anim-panel__timescale-button.is-active {\n  color: #000;\n}\n\n\n/* Labels */\n\n.anim-panel__labels {\n  padding: 13px 12px;\n  padding-top: 0;\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__labels > button {\n  margin-top: 13px;\n}\n\n.anim-panel__labels > button + button {\n  margin-left: 8px;\n}", ""]);
 
 	// exports
 

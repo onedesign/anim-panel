@@ -3,7 +3,7 @@
   top: -1px;
   right: 20px;
   width: 300px;
-  height: 132px;
+  min-height: 132px;
   background-color: rgba(255, 255, 255, 0.85);
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);
   padding-left: 40px;
@@ -24,6 +24,7 @@
   width: 40px;
   top: 0;
   left: 0;
+  height: 100%;
 }
 
 .anim-panel__control-button {
@@ -73,7 +74,12 @@
 
 .anim-panel__labels {
   padding: 13px 12px;
+  padding-top: 0;
   border-bottom: 1px solid #ddd;
+}
+
+.anim-panel__labels > button {
+  margin-top: 13px;
 }
 
 .anim-panel__labels > button + button {
