@@ -116,8 +116,21 @@ module.exports = function(timeline, options) {
       };
 
       var _addLabelButtons = function() {
-        var labels = timeline.getLabelsArray();
         var labelContainer = document.querySelector(self.labelsSelector);
+
+        // Automatically grabbing labels is only
+        // supported by TimelineMax, so display
+        // a message for TimelineLite users
+        if (typeof timeline.getLabelsArray === 'undefined') {
+          var message = document.createElement('p');
+          message.innerHTML = 'Use TimelineMax to show labels.';
+          labelContainer.appendChild(message);
+          return;
+        }
+
+        // …automatically grab timeline labels
+        // and add buttons for each
+        var labels = timeline.getLabelsArray();
 
         labels.forEach(function(label, idx) {
           var labelButton = document.createElement('button');
