@@ -152,6 +152,27 @@
   margin-left: 9px;
 }
 
+.anim-panel__slider-set-loop-markers {
+  position: relative;
+  padding-top: 4px;
+}
+
+.loop-marker-in {
+  width: 1px;
+  height: 5px;
+  position: absolute;
+  left: 0;
+  border-left: 1px solid #aaa;
+}
+
+.loop-marker-out {
+  width: 1px;
+  height: 5px;
+  position: absolute;
+  right: 0;
+  border-left: 1px solid #aaa;
+}
+
 
 /* Loop Set */
 

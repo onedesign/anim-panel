@@ -32,6 +32,8 @@ module.exports = function(timeline, options) {
         loopOutSelector: '.js-loop-out',
         loopClearSelector: '.js-loop-clear',
         shouldUpdateSliderFromTimeline: true,
+        loopMarkerInSelector: '.js-loop-marker-in',
+        loopMarkerOutSelector: '.js-loop-marker-out',
         loopIn: null,
         loopOut: null
       };
@@ -165,11 +167,13 @@ module.exports = function(timeline, options) {
           if (val) {
             self.loopIn = val;
             timeline.time(self.loopIn);
+            _updateLoopMarkers();
           }
         });
         localforage.getItem('loopOut', function(err, val) {
           if (val) {
             self.loopOut = val;
+            _updateLoopMarkers();
           }
         });
       };
@@ -219,6 +223,7 @@ module.exports = function(timeline, options) {
 
         localforage.setItem('loopIn', currentTime, function(err, val) {});
         self.loopIn = currentTime;
+        _updateLoopMarkers();
         console.log('Loop In Set: ', currentTime);
       };
 
@@ -230,6 +235,7 @@ module.exports = function(timeline, options) {
 
         localforage.setItem('loopOut', currentTime, function(err, val) {});
         self.loopOut = currentTime;
+        _updateLoopMarkers();
         console.log('Loop Out Set: ', currentTime);
       };
 
@@ -242,7 +248,19 @@ module.exports = function(timeline, options) {
       var _setLoopDefaults = function(evt) {
         self.loopIn = 0;
         self.loopOut = timeline.totalDuration();
+        _updateLoopMarkers();
         console.log('Loop Reset: In ' + self.loopIn + ', Out ' + self.loopOut);
+      };
+
+      var _updateLoopMarkers = function() {
+        var inEl = document.querySelector(self.loopMarkerInSelector);
+        var outEl = document.querySelector(self.loopMarkerOutSelector);
+
+        var loopInFraction = self.loopIn / timeline.totalDuration();
+        var loopOutFraction = self.loopOut / timeline.totalDuration();
+
+        inEl.style.left = (loopInFraction * 100) + '%';
+        outEl.style.left = (loopOutFraction * 100) + '%';
       };
 
       var _onTimelineUpdate = function() {
@@ -282,7 +300,7 @@ module.exports = function(timeline, options) {
       //////////////////////////////////////////////////////////////////////
       
       /* No public methods yet, but if you add one it should use the following signature: */
-      
+
       /*
       self.foo = function() {
         
