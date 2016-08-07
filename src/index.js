@@ -164,15 +164,18 @@ module.exports = function(timeline, options) {
 
       var _play = function(evt) {
         timeline.play();
+        document.querySelector(self.pauseSelector).classList.remove(self.activeTimescaleClass);
       };
 
       var _pause = function(evt) {
         timeline.pause();
+        document.querySelector(self.pauseSelector).classList.add(self.activeTimescaleClass);
       };
 
       var _restart = function(evt) {
         timeline.timeScale(1);
         timeline.restart();
+        document.querySelector(self.pauseSelector).classList.remove(self.activeTimescaleClass);
       };
 
       var _onTimelineUpdate = function() {

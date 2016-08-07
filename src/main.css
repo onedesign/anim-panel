@@ -42,6 +42,13 @@
   background-color: rgba(0, 0, 0, 0.03);
 }
 
+.anim-panel__control-button.is-active {
+  animation-name: active-control;
+  animation-duration: 1.5s;
+  animation-timing-function: ease;
+  animation-iteration-count: infinite;
+}
+
 .anim-panel__control-button--play {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>play</title><polygon points="20.657 14.5 11 20.157 11 8.843 20.657 14.5" style="fill:#231f20"/></svg>');
 }
@@ -52,6 +59,15 @@
 
 .anim-panel__control-button--restart {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>restart</title><polygon points="10.343 14.5 20 20.157 20 8.843 10.343 14.5" style="fill:#231f20"/><rect x="8" y="9" width="2" height="11" style="fill:#231f20"/></svg>');
+}
+
+@keyframes active-control {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
 }
 
 
