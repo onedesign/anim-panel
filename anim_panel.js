@@ -162,21 +162,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 
 	        // Stop updating based on timeline position as we drag the slider
-	        self.sliderEl.noUiSlider.on('start', () => {
+	        self.sliderEl.noUiSlider.on('start', function() {
 	          _startUpdatingTimelineFromSlider();
 	          self.shouldUpdateSliderFromTimeline = false;
 	          timeline.pause();
 	        });
 
 	        // Start updating again on drag end
-	        self.sliderEl.noUiSlider.on('end', () => {
+	        self.sliderEl.noUiSlider.on('end', function() {
 	          _stopUpdatingTimelineFromSlider();
 	          self.shouldUpdateSliderFromTimeline = true;
 	        });
 	      };
 
 	      var _startUpdatingTimelineFromSlider = function() {
-	        self.sliderEl.noUiSlider.on('slide', (values, handle) => {
+	        self.sliderEl.noUiSlider.on('slide', function(values, handle) {
 	          timeline.progress(values[0] / 100).pause();
 	        });
 	      };
@@ -241,10 +241,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        document.querySelector(self.restartSelector).addEventListener('click', _restart.bind(self));
 	        
 	        // Setting Timescale
-	        document.querySelectorAll(self.timescaleSelector).forEach(function(timescaleLink) {
+	        var timescaleLinks = document.querySelectorAll(self.timescaleSelector);
+	        for (var idx = 0; idx < timescaleLinks.length; idx++) {
+	          var timescaleLink = timescaleLinks[idx];
 	          var timescale = timescaleLink.getAttribute('data-timescale');
 	          timescaleLink.addEventListener('click', _updateTimescale.bind(self, timescaleLink, timescale));
-	        });
+	        }
 
 	        // Setting Loop
 	        document.querySelector(self.loopInSelector).addEventListener('click', _setLoopIn.bind(self));
