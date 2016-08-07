@@ -40,7 +40,7 @@ or simply include it in your HTML:
 var AnimPanel = require('anim-panel')
 
 // Create your Greensock timeline using TimelineLite or TimelineMax
-// (using Timeline Max gets you extra goodies like label buttons)
+// (using TimelineMax gets you extra goodies like label buttons)
 var tl = new TimelineMax({});
 
 // Add some stuff to your timeline (see the gsap docs if you don't know how to do this)
