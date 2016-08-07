@@ -40,6 +40,4 @@ tl.addLabel('outro')
     ease: Power4.easeInOut
   }, 'outro+=1');
 
-new AnimPanel(tl, {
-  
-});
+new AnimPanel(tl);
