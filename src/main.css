@@ -33,10 +33,25 @@
   text-align: center;
   cursor: pointer;
   margin: 0;
+  background-position: center center;
+  background-repeat: no-repeat;
+  text-indent: -9999px;
 }
 
 .anim-panel__control-button:hover {
   background-color: rgba(0, 0, 0, 0.03);
+}
+
+.anim-panel__control-button--play {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>play</title><polygon points="20.657 14.5 11 20.157 11 8.843 20.657 14.5" style="fill:#231f20"/></svg>');
+}
+
+.anim-panel__control-button--pause {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>pause</title><rect x="10" y="9" width="2" height="11" style="fill:#231f20"/><rect x="18" y="9" width="2" height="11" style="fill:#231f20"/></svg>');
+}
+
+.anim-panel__control-button--restart {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>restart</title><polygon points="10.343 14.5 20 20.157 20 8.843 10.343 14.5" style="fill:#231f20"/><rect x="8" y="9" width="2" height="11" style="fill:#231f20"/></svg>');
 }
 
 
