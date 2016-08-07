@@ -288,9 +288,12 @@ module.exports = function(timeline, options) {
 
       var _updateTimescale = function(selectedTimescale, timescale) {
         var timescaleItems = document.querySelectorAll(self.timescaleSelector);
-        timescaleItems.forEach(function(item) {
+        
+        for (var idx = 0; idx < timescaleItems.length; idx++) {
+          var item = timescaleItems[idx];
           item.classList.remove(self.activeTimescaleClass);
-        });
+        }
+        
         selectedTimescale.classList.add(self.activeTimescaleClass)
         timeline.timeScale(timescale).play();
       };
