@@ -1,4 +1,4 @@
-var styles = require('css!./main.css');
+var styles = require('css!postcss!./main.css');
 var sliderStyles = require('css!./no-ui-slider.css');
 var markup = require("html!./index.html");
 var noUiSlider = require('noUiSlider');
@@ -34,6 +34,9 @@ module.exports = function(timeline, options) {
         shouldUpdateSliderFromTimeline: true,
         loopMarkerInSelector: '.js-loop-marker-in',
         loopMarkerOutSelector: '.js-loop-marker-out',
+        dropdownSelector: '.js-anim-panel-dropdown',
+        dropdownTriggerSelector: '.js-anim-panel-dropdown-trigger',
+        dropdownOptionsSelector: '.js-anim-panel-dropdown-options',
         loopIn: null,
         loopOut: null
       };
@@ -147,8 +150,8 @@ module.exports = function(timeline, options) {
         var labels = timeline.getLabelsArray();
 
         labels.forEach(function(label, idx) {
-          var labelButton = document.createElement('button');
-          labelButton.setAttribute('type', 'button');
+          var labelButton = document.createElement('p');
+          labelButton.setAttribute('type', 'p');
           labelButton.setAttribute(self.timelineTimeDataAttr, label.time);
           labelButton.innerHTML = label.name;
           labelContainer.appendChild(labelButton);
@@ -183,6 +186,12 @@ module.exports = function(timeline, options) {
         document.querySelector(self.playSelector).addEventListener('click', _play.bind(self));
         document.querySelector(self.pauseSelector).addEventListener('click', _pause.bind(self));
         document.querySelector(self.restartSelector).addEventListener('click', _restart.bind(self));
+
+        // Dropdowns
+        var dropdowns = document.querySelectorAll(self.dropdownTriggerSelector);
+        dropdowns.forEach(function(el, idx) {
+          el.addEventListener('click', _toggleDropdown.bind(self));
+        });
         
         // Setting Timescale
         var timescaleLinks = document.querySelectorAll(self.timescaleSelector);
@@ -263,6 +272,11 @@ module.exports = function(timeline, options) {
 
         inEl.style.left = (loopInFraction * 100) + '%';
         outEl.style.left = (loopOutFraction * 100) + '%';
+      };
+
+      var _toggleDropdown = function(evt) {
+        var container = evt.target.parentNode;
+        container.classList.toggle('is-active');
       };
 
       var _onTimelineUpdate = function() {

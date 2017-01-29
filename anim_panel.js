@@ -54,7 +54,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var styles = __webpack_require__(1);
+	var styles = __webpack_require__(7);
 	var sliderStyles = __webpack_require__(3);
 	var markup = __webpack_require__(4);
 	var noUiSlider = __webpack_require__(5);
@@ -90,6 +90,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        shouldUpdateSliderFromTimeline: true,
 	        loopMarkerInSelector: '.js-loop-marker-in',
 	        loopMarkerOutSelector: '.js-loop-marker-out',
+	        dropdownSelector: '.js-anim-panel-dropdown',
+	        dropdownTriggerSelector: '.js-anim-panel-dropdown-trigger',
+	        dropdownOptionsSelector: '.js-anim-panel-dropdown-options',
 	        loopIn: null,
 	        loopOut: null
 	      };
@@ -203,8 +206,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var labels = timeline.getLabelsArray();
 
 	        labels.forEach(function(label, idx) {
-	          var labelButton = document.createElement('button');
-	          labelButton.setAttribute('type', 'button');
+	          var labelButton = document.createElement('p');
+	          labelButton.setAttribute('type', 'p');
 	          labelButton.setAttribute(self.timelineTimeDataAttr, label.time);
 	          labelButton.innerHTML = label.name;
 	          labelContainer.appendChild(labelButton);
@@ -239,6 +242,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        document.querySelector(self.playSelector).addEventListener('click', _play.bind(self));
 	        document.querySelector(self.pauseSelector).addEventListener('click', _pause.bind(self));
 	        document.querySelector(self.restartSelector).addEventListener('click', _restart.bind(self));
+
+	        // Dropdowns
+	        var dropdowns = document.querySelectorAll(self.dropdownTriggerSelector);
+	        dropdowns.forEach(function(el, idx) {
+	          el.addEventListener('click', _toggleDropdown.bind(self));
+	        });
 	        
 	        // Setting Timescale
 	        var timescaleLinks = document.querySelectorAll(self.timescaleSelector);
@@ -321,6 +330,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        outEl.style.left = (loopOutFraction * 100) + '%';
 	      };
 
+	      var _toggleDropdown = function(evt) {
+	        var container = evt.target.parentNode;
+	        container.classList.toggle('is-active');
+	      };
+
 	      var _onTimelineUpdate = function() {
 	        // Update the displayed time
 	        _updateTime(timeline.totalTime());
@@ -381,20 +395,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 /***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(2)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  right: 20px;\n  width: 340px;\n  min-height: 132px;\n  background-color: rgba(255, 255, 255, 0.85);\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);\n  padding-left: 40px;\n  padding-right: 40px;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 12px;\n}\n\n.anim-panel .js-slider {\n  margin-top: 8px;\n}\n\n\n/* Controls */\n\n.anim-panel__control-set {\n  position: absolute;\n  border-right: 1px solid #ddd;\n  width: 40px;\n  top: 0;\n  left: 0;\n  height: 100%;\n}\n\n.anim-panel__control-button {\n  width: 100%;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n  text-indent: -9999px;\n}\n\n.anim-panel__control-button:hover {\n  background-color: rgba(0, 0, 0, 0.03);\n}\n\n.anim-panel__control-button.is-active {\n  animation-name: active-control;\n  animation-duration: 1.5s;\n  animation-timing-function: ease;\n  animation-iteration-count: infinite;\n}\n\n.anim-panel__control-button--play {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>play</title><polygon points=\"20.657 14.5 11 20.157 11 8.843 20.657 14.5\" style=\"fill:#231f20\"/></svg>');\n}\n\n.anim-panel__control-button--pause {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>pause</title><rect x=\"10\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#231f20\"/><rect x=\"18\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#231f20\"/></svg>');\n}\n\n.anim-panel__control-button--restart {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#231f20\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#231f20\"/></svg>');\n}\n\n@keyframes active-control {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.3;\n  }\n}\n\n\n/* Time Scale */\n\n.anim-panel__timescale-set {\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button {\n  margin: 0;\n  display: inline-block;\n  padding: 15px 0;\n  text-align: center;\n  margin-right: -4px;\n  width: 24.2%;\n  cursor: pointer;\n  color: #aaa;\n}\n\n.anim-panel__timescale-button + .anim-panel__timescale-button {\n  border-left: 1px solid #ddd;\n}\n\n.anim-panel__timescale-button:hover {\n  color: #000;\n}\n\n.anim-panel__timescale-button.is-active {\n  color: #000;\n}\n\n\n/* Labels */\n\n.anim-panel__labels {\n  padding: 13px 12px;\n  padding-top: 0;\n  border-bottom: 1px solid #ddd;\n}\n\n.anim-panel__labels > p {\n  margin-bottom: 0;\n  color: #aaa;\n}\n\n.anim-panel__labels > button {\n  margin-top: 13px;\n}\n\n.anim-panel__labels > button + button {\n  margin-left: 8px;\n}\n\n\n/* Slider */\n\n.anim-panel__slider-set {\n  position: relative;\n  padding-right: 60px;\n  height: 42px;\n}\n\n.anim-panel__slider-set-slider {\n  padding: 8px 15px 0;\n}\n\n.anim-panel__slider-set-time {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 100%;\n  border-left: 1px solid #ddd;\n  width: 60px;\n  margin: 0;\n}\n\n.anim-panel__slider-set-time > p {\n  margin: 0;\n  margin-top: 14px;\n  margin-left: 9px;\n}\n\n.anim-panel__slider-set-loop-markers {\n  position: relative;\n  padding-top: 4px;\n}\n\n.loop-marker-in {\n  width: 1px;\n  height: 5px;\n  position: absolute;\n  left: 0;\n  border-left: 1px solid #aaa;\n}\n\n.loop-marker-out {\n  width: 1px;\n  height: 5px;\n  position: absolute;\n  right: 0;\n  border-left: 1px solid #aaa;\n}\n\n\n/* Loop Set */\n\n.anim-panel__loop-set {\n  position: absolute;\n  border-left: 1px solid #ddd;\n  width: 40px;\n  top: 0;\n  right: 0;\n  height: 100%;\n}\n\n.anim-panel__loop-button {\n  width: 100%;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n}\n\n.anim-panel__loop-button:hover {\n  background-color: rgba(0, 0, 0, 0.03);\n}", ""]);
-
-	// exports
-
-
-/***/ },
+/* 1 */,
 /* 2 */
 /***/ function(module, exports) {
 
@@ -468,7 +469,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__control-button anim-panel__control-button--play js-play\" title=\"Play\">Play</p>\n  <p class=\"anim-panel__control-button anim-panel__control-button--pause js-pause\" title=\"Pause\">Pause</p>\n  <p class=\"anim-panel__control-button anim-panel__control-button--restart js-restart\" title=\"Restart\">Restart</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels js-anim-panel-labels\"></div>\n\n<div class=\"anim-panel__slider-set\">\n  <div class=\"anim-panel__slider-set-slider\">\n    <div class=\"js-slider\"></div>\n    <div class=\"anim-panel__slider-set-loop-markers\">\n      <span class=\"loop-marker-in js-loop-marker-in\"></span>\n      <span class=\"loop-marker-out js-loop-marker-out\"></span>\n    </div>\n  </div>\n\n  <div class=\"anim-panel__slider-set-time\">\n    <p class=\"js-time\">0</p>\n  </div>\n</div>\n\n<div class=\"anim-panel__loop-set\">\n  <p class=\"anim-panel__loop-button anim-panel__loop-button--in js-loop-in\" title=\"Set In\">in</p>\n  <p class=\"anim-panel__loop-button anim-panel__loop-button--out js-loop-out\" title=\"Set Out\">out</p>\n  <p class=\"anim-panel__loop-button anim-panel__loop-button--clear js-loop-clear\" title=\"Clear\">x</p>\n  \n</div>\n";
+	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__control-button anim-panel__control-button--play js-play\" title=\"Play\">Play</p>\n  <p class=\"anim-panel__control-button anim-panel__control-button--pause js-pause\" title=\"Pause\">Pause</p>\n  <p class=\"anim-panel__control-button anim-panel__control-button--restart js-restart\" title=\"Restart\">Restart</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels\">\n  <div class=\"anim-panel__dropdown js-anim-panel-dropdown\">\n    <div class=\"anim-panel__dropdown-labels-button js-anim-panel-dropdown-trigger\">L</div>\n    <div class=\"anim-panel__dropdown-options js-anim-panel-labels js-anim-panel-dropdown-options\"></div>\n  </div>\n</div>\n\n<div class=\"anim-panel__loop-set\">\n  <p class=\"anim-panel__loop-button anim-panel__loop-button--in js-loop-in\" title=\"Set In\">in</p>\n  <p class=\"anim-panel__loop-button anim-panel__loop-button--out js-loop-out\" title=\"Set Out\">out</p>\n  <p class=\"anim-panel__loop-button anim-panel__loop-button--clear js-loop-clear\" title=\"Clear\">x</p>\n</div>\n\n<div class=\"anim-panel__slider-set\">\n  <div class=\"anim-panel__slider-set-slider\">\n    <div class=\"js-slider\"></div>\n    <div class=\"anim-panel__slider-set-loop-markers\">\n      <span class=\"loop-marker-in js-loop-marker-in\"></span>\n      <span class=\"loop-marker-out js-loop-marker-out\"></span>\n    </div>\n  </div>\n\n  <div class=\"anim-panel__slider-set-time\">\n    <p class=\"js-time\">0</p>\n  </div>\n</div>\n";
 
 /***/ },
 /* 5 */
@@ -4735,6 +4736,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	},{"3":3}]},{},[4])(4)
 	});
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(2)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  left: 0;\n  right: 0;\n  width: 100%;\n  background-color: rgba(255, 255, 255, 0.85);\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 12px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  background-color: rgba(0, 0, 0, 0.9);\n}\n\n.anim-panel .js-slider {\n  margin-top: 8px;\n}\n\n\n/* Controls */\n\n.anim-panel__control-set {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n\n.anim-panel__control-button {\n  width: 43px;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n  text-indent: -9999px;\n}\n\n.anim-panel__control-button:hover {\n  background-color: rgba(255, 255, 255, 0.04);\n}\n\n.anim-panel__control-button.is-active {\n  -webkit-animation-name: active-control;\n          animation-name: active-control;\n  -webkit-animation-duration: 1.5s;\n          animation-duration: 1.5s;\n  -webkit-animation-timing-function: ease;\n          animation-timing-function: ease;\n  -webkit-animation-iteration-count: infinite;\n          animation-iteration-count: infinite;\n}\n\n.anim-panel__control-button--play {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>play</title><polygon points=\"20.657 14.5 11 20.157 11 8.843 20.657 14.5\" style=\"fill:#fff\"/></svg>');\n}\n\n.anim-panel__control-button--pause {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>pause</title><rect x=\"10\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/><rect x=\"18\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>');\n}\n\n.anim-panel__control-button--restart {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>');\n}\n\n@-webkit-keyframes active-control {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.3;\n  }\n}\n\n@keyframes active-control {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.3;\n  }\n}\n\n\n/* Time Scale */\n\n.anim-panel__timescale-set {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n\n.anim-panel__timescale-button {\n  margin: 0;\n  padding: 15px 12px;\n  text-align: center;\n  cursor: pointer;\n  color: #666;\n}\n\n.anim-panel__timescale-button:hover {\n  color: #aaa;\n}\n\n.anim-panel__timescale-button.is-active {\n  color: #fff;\n}\n\n\n/* Labels */\n\n.anim-panel__labels {\n\n}\n\n.anim-panel__dropdown-labels-button {\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  width: 43px;\n  color: #fff;\n}\n\n.anim-panel__dropdown {\n  position: relative;\n}\n\n.anim-panel__dropdown-options {\n  position: absolute;\n  background-color: red;\n  display: none;\n}\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-labels-button {\n  background-color: #333;\n}\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-options {\n  display: block;\n}\n\n.anim-panel__dropdown-options > p {\n  margin: 0;\n  padding: 11px 14px;\n  color: #fff;\n  background-color: #555;\n  cursor: pointer;\n}\n\n.anim-panel__dropdown-options > p:hover {\n  background-color: #444;\n}\n\n\n/* Loop Set */\n\n.anim-panel__loop-set {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n\n.anim-panel__loop-button {\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  width: 43px;\n  color: #fff;\n}\n\n.anim-panel__loop-button:hover {\n  background-color: rgba(255, 255, 255, 0.04);\n}\n\n\n/* Slider */\n\n.anim-panel__slider-set {\n  position: relative;\n  padding-right: 60px;\n  height: 42px;\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n\n.anim-panel__slider-set-slider {\n  padding: 8px 15px 0;\n}\n\n.anim-panel__slider-set-time {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 100%;\n  width: 60px;\n  margin: 0;\n}\n\n.anim-panel__slider-set-time > p {\n  margin: 0;\n  margin-top: 14px;\n  margin-left: 9px;\n  color: #fff;\n}\n\n.anim-panel__slider-set-loop-markers {\n  position: relative;\n  padding-top: 4px;\n}\n\n.loop-marker-in {\n  width: 1px;\n  height: 5px;\n  position: absolute;\n  left: 0;\n  border-left: 1px solid #aaa;\n}\n\n.loop-marker-out {\n  width: 1px;\n  height: 5px;\n  position: absolute;\n  right: 0;\n  border-left: 1px solid #aaa;\n}", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ])
