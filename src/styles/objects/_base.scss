@@ -1,0 +1,43 @@
+//---------------------------------------------------------------
+// Anim Panel
+//---------------------------------------------------------------
+
+.anim-panel {
+  position: fixed;
+  top: -1px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  font-family: "Menlo", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  background-color: $color-black;
+
+  > .js-slider {
+    margin-top: 8px;
+  }
+}
+
+  .anim-panel__control-set {
+    display: flex;
+  }
+
+  .anim-panel__timescale-set {
+    display: flex;
+  }
+
+  .anim-panel__labels {
+
+  }
+
+  .anim-panel__loop-set {
+    display: flex;
+  }
+  
+  .anim-panel__slider-set {
+    position: relative;
+    padding-right: 60px;
+    height: 42px;
+    flex: 1;
+  }

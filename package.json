@@ -15,15 +15,16 @@
   "license": "MIT",
   "homepage": "https://github.com/onedesign/anim-panel",
   "dependencies": {
-    "localforage": "^1.4.2",
-    "nouislider": "^8.5.1"
+    "localforage": "^1.4.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.0",
     "browser-sync": "^2.14.0",
     "css-loader": "^0.23.1",
     "html-loader": "^0.4.3",
+    "node-sass": "^4.4.0",
     "postcss-loader": "^1.2.2",
+    "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1"
   },

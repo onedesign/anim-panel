@@ -10,7 +10,8 @@ module.exports = {
     { test: /\.css$/, 
       loader: [
         'style-loader!css-loader',
-        'postcss-loader'
+        'postcss-loader',
+        'sass-loader'
       ]
     }
   ]

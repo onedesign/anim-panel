@@ -1,0 +1,19 @@
+//---------------------------------------------------------------
+// Timescale Button
+//---------------------------------------------------------------
+
+.anim-panel__timescale-button {
+  margin: 0;
+  padding: 15px 12px;
+  text-align: center;
+  cursor: pointer;
+  color: #666;
+  
+  &:hover {
+    color: #aaa;
+  }
+
+  &.is-active {
+    color: #fff;
+  }
+}

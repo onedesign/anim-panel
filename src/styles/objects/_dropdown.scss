@@ -1,0 +1,40 @@
+//---------------------------------------------------------------
+// Dropdown
+//---------------------------------------------------------------
+
+.anim-panel__dropdown {
+  position: relative;
+}
+
+.anim-panel__dropdown-options {
+  position: absolute;
+  background-color: red;
+  display: none;
+
+  > p {
+    margin: 0;
+    padding: 11px 14px;
+    color: #fff;
+    background-color: #555;
+    cursor: pointer;
+  }
+
+  > p:hover {
+    background-color: #444;
+  }
+}
+
+//
+// State
+//
+
+.anim-panel__dropdown.is-active {
+
+  .anim-panel__dropdown-labels-button {
+    background-color: #333;
+  }
+
+  .anim-panel__dropdown-options {
+    display: block;
+  }
+}

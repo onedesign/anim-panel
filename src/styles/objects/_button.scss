@@ -1,0 +1,51 @@
+//---------------------------------------------------------------
+// Button
+//---------------------------------------------------------------
+
+.anim-panel__button {
+  width: 43px;
+  padding: 15px 0;
+  text-align: center;
+  cursor: pointer;
+  margin: 0;
+  background-position: center center;
+  background-repeat: no-repeat;
+  text-indent: -9999px;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+//
+// Modifiers
+//
+
+.anim-panel__button--play {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>play</title><polygon points="20.657 14.5 11 20.157 11 8.843 20.657 14.5" style="fill:#fff"/></svg>');
+}
+
+.anim-panel__button--pause {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>pause</title><rect x="10" y="9" width="2" height="11" style="fill:#fff"/><rect x="18" y="9" width="2" height="11" style="fill:#fff"/></svg>');
+}
+
+.anim-panel__button--restart {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>restart</title><polygon points="10.343 14.5 20 20.157 20 8.843 10.343 14.5" style="fill:#fff"/><rect x="8" y="9" width="2" height="11" style="fill:#fff"/></svg>');
+}
+
+.anim-panel__button--labels {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>restart</title><polygon points="10.343 14.5 20 20.157 20 8.843 10.343 14.5" style="fill:#fff"/><rect x="8" y="9" width="2" height="11" style="fill:#fff"/></svg>');
+}
+
+//
+// Animations
+//
+
+@keyframes active-control {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
