@@ -1,6 +1,7 @@
 var styles = require('css!sass!postcss!./styles/main.scss');
 var markup = require("html!./index.html");
 var localforage = require('localforage');
+var Progress = require('./modules/progress');
 
 module.exports = function(timeline, options) {
       /*
@@ -29,6 +30,7 @@ module.exports = function(timeline, options) {
         dropdownSelector: '.js-anim-panel-dropdown',
         dropdownTriggerSelector: '.js-anim-panel-dropdown-trigger',
         dropdownOptionsSelector: '.js-anim-panel-dropdown-options',
+        progress: null,
         loopIn: null,
         loopOut: null
       };
@@ -59,6 +61,7 @@ module.exports = function(timeline, options) {
       var _init = function() {
         _appendPanel();
         _addStyles();
+        _addProgress();
         _addLabelButtons();
         _setLoop();
         _addEventListeners();
@@ -84,6 +87,10 @@ module.exports = function(timeline, options) {
         }
 
         head.appendChild(style);
+      };
+
+      var _addProgress = function() {
+        self.progress = new Progress(timeline);
       };
 
       var _addLabelButtons = function() {
@@ -209,6 +216,8 @@ module.exports = function(timeline, options) {
         }
 
         // TODO: Update slider based on timeline
+        var progressPercentage = timeline.progress() * 100;
+        self.progress.setPercentage(progressPercentage);
       };
 
       var _updateTime = function(timelineTime) {
