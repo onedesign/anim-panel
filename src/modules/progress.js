@@ -34,7 +34,7 @@ module.exports = function(timeline) {
  
   var _addEventListeners = function() {
     self.draggable.on('pointerDown', function(evt, poitner) {
-      timeline.pause();
+      timeline.pause(); 
       self.isDragging = true;
     });
 
@@ -50,7 +50,9 @@ module.exports = function(timeline) {
   };
 
   var _trackClicked = function(evt) {
-    var clickPos = evt.offsetX;
+    if (evt.target === document.querySelector(self.sliderPlayheadSelector)) return;
+    var playheadWidth = document.querySelector(self.sliderPlayheadSelector).offsetWidth;
+    var clickPos = evt.offsetX - playheadWidth / 2;
     var progressPercentage = clickPos / _getMaxPosition() * 100;
     self.setPercentage(progressPercentage);
     timeline.progress(_getProgressPercentage()).pause();
