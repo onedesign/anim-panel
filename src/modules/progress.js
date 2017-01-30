@@ -37,7 +37,7 @@ module.exports = function(timeline) {
       timeline.pause();
       self.isDragging = true;
     });
-    
+
     self.draggable.on('pointerUp', function(evt, poitner) {
       self.isDragging = false;
     });
@@ -45,6 +45,15 @@ module.exports = function(timeline) {
     self.draggable.on('dragMove', function(evt, pointer, moveVector) {
       timeline.progress(_getProgressPercentage()).pause();
     });
+
+    document.querySelector(self.sliderTrackSelector).addEventListener('click', _trackClicked.bind(self));
+  };
+
+  var _trackClicked = function(evt) {
+    var clickPos = evt.offsetX;
+    var progressPercentage = clickPos / _getMaxPosition() * 100;
+    self.setPercentage(progressPercentage);
+    timeline.progress(_getProgressPercentage()).pause();
   };
 
   var _getMaxPosition = function() {
@@ -67,7 +76,6 @@ module.exports = function(timeline) {
   
   
   self.setPercentage = function(percentage) {
-    // TODO: this currently results in strange draggable behavior.
     var max = _getMaxPosition();
     var playheadEl = document.querySelector(self.sliderPlayheadSelector);
     var position = max * (percentage / 100);
