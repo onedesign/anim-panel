@@ -19,8 +19,7 @@ module.exports = function(timeline, options) {
       var self = {
         animPanelBaseClass: 'anim-panel',
         timelineTimeDataAttr: 'data-timeline-time',
-        playSelector: '.js-play',
-        pauseSelector: '.js-pause',
+        playPauseSelector: '.js-play-pause',
         restartSelector: '.js-restart',
         timescaleSelector: '.js-timescale',
         activeTimescaleClass: 'is-active',
@@ -65,7 +64,6 @@ module.exports = function(timeline, options) {
         _addLabelButtons();
         _setLoop();
         _addEventListeners();
-        _play();
       };
 
       var _appendPanel = function() {
@@ -142,8 +140,7 @@ module.exports = function(timeline, options) {
      
       var _addEventListeners = function() {
         // Playback Controls
-        document.querySelector(self.playSelector).addEventListener('click', _play.bind(self));
-        document.querySelector(self.pauseSelector).addEventListener('click', _pause.bind(self));
+        document.querySelector(self.playPauseSelector).addEventListener('click', _togglePlay.bind(self));
         document.querySelector(self.restartSelector).addEventListener('click', _restart.bind(self));
 
         // Dropdowns
@@ -161,15 +158,15 @@ module.exports = function(timeline, options) {
         }
 
         // Listen for the playhead to change
-        timeline.eventCallback('onUpdate', _onTimelineUpdate.bind(self))
+        timeline.eventCallback('onUpdate', _onTimelineUpdate.bind(self));
       };
 
-      var _play = function(evt) {
-        timeline.play();
-      };
-
-      var _pause = function(evt) {
-        timeline.pause();
+      var _togglePlay = function(evt) {
+        if (timeline.paused()) {
+          timeline.play();
+        } else {
+          timeline.pause();
+        }
       };
 
       var _restart = function(evt) {
@@ -215,7 +212,7 @@ module.exports = function(timeline, options) {
           timeline.time(self.loopIn);
         }
 
-        // TODO: Update slider based on timeline
+        // Update slider based on timeline
         if (self.progress.isDragging) return;
         var progressPercentage = timeline.progress() * 100;
         self.progress.setPercentage(progressPercentage);

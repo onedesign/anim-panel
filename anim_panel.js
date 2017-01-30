@@ -75,8 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var self = {
 	        animPanelBaseClass: 'anim-panel',
 	        timelineTimeDataAttr: 'data-timeline-time',
-	        playSelector: '.js-play',
-	        pauseSelector: '.js-pause',
+	        playPauseSelector: '.js-play-pause',
 	        restartSelector: '.js-restart',
 	        timescaleSelector: '.js-timescale',
 	        activeTimescaleClass: 'is-active',
@@ -121,7 +120,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _addLabelButtons();
 	        _setLoop();
 	        _addEventListeners();
-	        _play();
 	      };
 
 	      var _appendPanel = function() {
@@ -198,8 +196,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     
 	      var _addEventListeners = function() {
 	        // Playback Controls
-	        document.querySelector(self.playSelector).addEventListener('click', _play.bind(self));
-	        document.querySelector(self.pauseSelector).addEventListener('click', _pause.bind(self));
+	        document.querySelector(self.playPauseSelector).addEventListener('click', _togglePlay.bind(self));
 	        document.querySelector(self.restartSelector).addEventListener('click', _restart.bind(self));
 
 	        // Dropdowns
@@ -217,15 +214,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        // Listen for the playhead to change
-	        timeline.eventCallback('onUpdate', _onTimelineUpdate.bind(self))
+	        timeline.eventCallback('onUpdate', _onTimelineUpdate.bind(self));
 	      };
 
-	      var _play = function(evt) {
-	        timeline.play();
-	      };
-
-	      var _pause = function(evt) {
-	        timeline.pause();
+	      var _togglePlay = function(evt) {
+	        if (timeline.paused()) {
+	          timeline.play();
+	        } else {
+	          timeline.pause();
+	        }
 	      };
 
 	      var _restart = function(evt) {
@@ -271,7 +268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          timeline.time(self.loopIn);
 	        }
 
-	        // TODO: Update slider based on timeline
+	        // Update slider based on timeline
 	        if (self.progress.isDragging) return;
 	        var progressPercentage = timeline.progress() * 100;
 	        self.progress.setPercentage(progressPercentage);
@@ -316,7 +313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  left: 0;\n  right: 0;\n  width: 100%;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 11px;\n  display: flex;\n  justify-content: space-between;\n  background-color: rgba(0, 0, 0, 0.9); }\n  .anim-panel > .js-slider {\n    margin-top: 8px; }\n\n.anim-panel__control-set {\n  display: flex; }\n\n.anim-panel__timescale-set {\n  display: flex; }\n\n.anim-panel__loop-set {\n  display: flex; }\n\n.anim-panel__slider-set {\n  flex: 1; }\n\n.anim-panel__button {\n  width: 43px;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n  text-indent: -9999px; }\n  .anim-panel__button:hover {\n    background-color: rgba(255, 255, 255, 0.05); }\n\n.anim-panel__button--play {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>play</title><polygon points=\"20.657 14.5 11 20.157 11 8.843 20.657 14.5\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--pause {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>pause</title><rect x=\"10\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/><rect x=\"18\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--restart {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--labels {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n@keyframes active-control {\n  0%, 100% {\n    opacity: 1; }\n  50% {\n    opacity: 0.3; } }\n\n.anim-panel__timescale-button {\n  margin: 0;\n  padding: 15px 12px;\n  text-align: center;\n  cursor: pointer;\n  color: #666; }\n  .anim-panel__timescale-button:hover {\n    color: #aaa; }\n  .anim-panel__timescale-button.is-active {\n    color: #fff; }\n\n.anim-panel__dropdown {\n  position: relative; }\n\n.anim-panel__dropdown-options {\n  position: absolute;\n  background-color: red;\n  display: none; }\n  .anim-panel__dropdown-options > p {\n    margin: 0;\n    padding: 11px 14px;\n    color: #fff;\n    background-color: #555;\n    cursor: pointer; }\n  .anim-panel__dropdown-options > p:hover {\n    background-color: #444; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-labels-button {\n  background-color: #333; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-options {\n  display: block; }\n\n.anim-panel__time {\n  width: 60px;\n  margin: 0; }\n  .anim-panel__time > p {\n    margin: 0;\n    margin-top: 14px;\n    margin-left: 17px;\n    color: #fff; }\n\n.anim-panel__slider-track {\n  width: 100%;\n  height: 42px;\n  position: relative; }\n  .anim-panel__slider-track:before {\n    content: \"\";\n    display: block;\n    position: absolute;\n    height: 6px;\n    left: 18px;\n    right: 18px;\n    top: 18px;\n    background-color: rgba(255, 255, 255, 0.3);\n    border-radius: 3px; }\n\n.anim-panel__slider-playhead {\n  width: 42px;\n  height: 42px;\n  display: block;\n  position: relative;\n  cursor: pointer; }\n  .anim-panel__slider-playhead:before {\n    content: \"\";\n    display: block;\n    width: 6px;\n    height: 6px;\n    border-radius: 3px;\n    background-color: #fff;\n    transform-origin: 50% 50%;\n    position: absolute;\n    left: 18px;\n    top: 18px;\n    transition: transform 0.2s; }\n\n.anim-panel__slider:hover .anim-panel__slider-playhead:before {\n  transform: scale(2.5); }\n", ""]);
+	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  left: 0;\n  right: 0;\n  width: 100%;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 11px;\n  display: flex;\n  justify-content: space-between;\n  background-color: rgba(0, 0, 0, 0.9); }\n  .anim-panel > .js-slider {\n    margin-top: 8px; }\n\n.anim-panel__control-set {\n  display: flex; }\n\n.anim-panel__timescale-set {\n  display: flex; }\n\n.anim-panel__loop-set {\n  display: flex; }\n\n.anim-panel__slider-set {\n  flex: 1; }\n\n.anim-panel__button {\n  width: 43px;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n  text-indent: -9999px; }\n  .anim-panel__button:hover {\n    background-color: rgba(255, 255, 255, 0.05); }\n\n.anim-panel__button--play-pause {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>play</title><polygon points=\"20.657 14.5 11 20.157 11 8.843 20.657 14.5\" style=\"fill:#fff\"/></svg>'); }\n  .anim-panel__button--play-pause.is-paused {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>pause</title><rect x=\"10\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/><rect x=\"18\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--restart {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--labels {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n@keyframes active-control {\n  0%, 100% {\n    opacity: 1; }\n  50% {\n    opacity: 0.3; } }\n\n.anim-panel__timescale-button {\n  margin: 0;\n  padding: 15px 12px;\n  text-align: center;\n  cursor: pointer;\n  color: #666; }\n  .anim-panel__timescale-button:hover {\n    color: #aaa; }\n  .anim-panel__timescale-button.is-active {\n    color: #fff; }\n\n.anim-panel__dropdown {\n  position: relative; }\n\n.anim-panel__dropdown-options {\n  position: absolute;\n  background-color: red;\n  display: none; }\n  .anim-panel__dropdown-options > p {\n    margin: 0;\n    padding: 11px 14px;\n    color: #fff;\n    background-color: #555;\n    cursor: pointer; }\n  .anim-panel__dropdown-options > p:hover {\n    background-color: #444; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-labels-button {\n  background-color: #333; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-options {\n  display: block; }\n\n.anim-panel__time {\n  width: 60px;\n  margin: 0; }\n  .anim-panel__time > p {\n    margin: 0;\n    margin-top: 14px;\n    margin-left: 17px;\n    color: #fff; }\n\n.anim-panel__slider-track {\n  width: 100%;\n  height: 42px;\n  position: relative; }\n  .anim-panel__slider-track:before {\n    content: \"\";\n    display: block;\n    position: absolute;\n    height: 6px;\n    left: 18px;\n    right: 18px;\n    top: 18px;\n    background-color: rgba(255, 255, 255, 0.3);\n    border-radius: 3px; }\n\n.anim-panel__slider-playhead {\n  width: 42px;\n  height: 42px;\n  display: block;\n  position: relative;\n  cursor: pointer; }\n  .anim-panel__slider-playhead:before {\n    content: \"\";\n    display: block;\n    width: 6px;\n    height: 6px;\n    border-radius: 3px;\n    background-color: #fff;\n    transform-origin: 50% 50%;\n    position: absolute;\n    left: 18px;\n    top: 18px;\n    transition: transform 0.2s; }\n\n.anim-panel__slider:hover .anim-panel__slider-playhead:before {\n  transform: scale(2.5); }\n", ""]);
 
 	// exports
 
@@ -381,7 +378,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__button anim-panel__button--play js-play\" title=\"Play\">Play</p>\n  <p class=\"anim-panel__button anim-panel__button--pause js-pause\" title=\"Pause\">Pause</p>\n  <p class=\"anim-panel__button anim-panel__button--restart js-restart\" title=\"Restart\">Restart</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels\">\n  <div class=\"anim-panel__dropdown js-anim-panel-dropdown\">\n    <div class=\"anim-panel__button anim-panel__button--labels js-anim-panel-dropdown-trigger\">L</div>\n    <div class=\"anim-panel__dropdown-options js-anim-panel-labels js-anim-panel-dropdown-options\"></div>\n  </div>\n</div>\n\n<div class=\"anim-panel__slider-set\">\n  <div class=\"anim-panel__slider js-anim-panel-slider\">\n    <div class=\"anim-panel__slider-track js-anim-panel-slider-track\">\n      <span class=\"anim-panel__slider-playhead js-anim-panel-slider-playhead\"></span>\n    </div>\n  </div>\n</div>\n\n<div class=\"anim-panel__time\">\n  <p class=\"js-time\">0</p>\n</div>\n";
+	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__button anim-panel__button--play-pause js-play-pause\" title=\"Play/Pause\">Play/Pause</p>\n  <p class=\"anim-panel__button anim-panel__button--restart js-restart\" title=\"Restart\">Restart</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels\">\n  <div class=\"anim-panel__dropdown js-anim-panel-dropdown\">\n    <div class=\"anim-panel__button anim-panel__button--labels js-anim-panel-dropdown-trigger\">L</div>\n    <div class=\"anim-panel__dropdown-options js-anim-panel-labels js-anim-panel-dropdown-options\"></div>\n  </div>\n</div>\n\n<div class=\"anim-panel__slider-set\">\n  <div class=\"anim-panel__slider js-anim-panel-slider\">\n    <div class=\"anim-panel__slider-track js-anim-panel-slider-track\">\n      <span class=\"anim-panel__slider-playhead js-anim-panel-slider-playhead\"></span>\n    </div>\n  </div>\n</div>\n\n<div class=\"anim-panel__time\">\n  <p class=\"js-time\">0</p>\n</div>\n";
 
 /***/ },
 /* 4 */

@@ -21,12 +21,12 @@
 // Modifiers
 //
 
-.anim-panel__button--play {
+.anim-panel__button--play-pause {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>play</title><polygon points="20.657 14.5 11 20.157 11 8.843 20.657 14.5" style="fill:#fff"/></svg>');
-}
 
-.anim-panel__button--pause {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>pause</title><rect x="10" y="9" width="2" height="11" style="fill:#fff"/><rect x="18" y="9" width="2" height="11" style="fill:#fff"/></svg>');
+  &.is-paused {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><title>pause</title><rect x="10" y="9" width="2" height="11" style="fill:#fff"/><rect x="18" y="9" width="2" height="11" style="fill:#fff"/></svg>');
+  }
 }
 
 .anim-panel__button--restart {
