@@ -10,7 +10,8 @@ module.exports = function(timeline) {
     sliderSelector: '.js-anim-panel-slider',
     sliderTrackSelector: '.js-anim-panel-slider-track',
     sliderPlayheadSelector: '.js-anim-panel-slider-playhead',
-    draggable: null
+    draggable: null,
+    isDragging: false
   };
  
  
@@ -34,6 +35,11 @@ module.exports = function(timeline) {
   var _addEventListeners = function() {
     self.draggable.on('pointerDown', function(evt, poitner) {
       timeline.pause();
+      self.isDragging = true;
+    });
+    
+    self.draggable.on('pointerUp', function(evt, poitner) {
+      self.isDragging = false;
     });
 
     self.draggable.on('dragMove', function(evt, pointer, moveVector) {

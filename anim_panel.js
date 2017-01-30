@@ -54,10 +54,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var styles = __webpack_require__(7);
-	var markup = __webpack_require__(4);
-	var localforage = __webpack_require__(6);
-	var Progress = __webpack_require__(8);
+	var styles = __webpack_require__(1);
+	var markup = __webpack_require__(3);
+	var localforage = __webpack_require__(4);
+	var Progress = __webpack_require__(5);
 
 	module.exports = function(timeline, options) {
 	      /*
@@ -272,6 +272,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        // TODO: Update slider based on timeline
+	        if (self.progress.isDragging) return;
 	        var progressPercentage = timeline.progress() * 100;
 	        self.progress.setPercentage(progressPercentage);
 	      };
@@ -307,7 +308,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 /***/ },
-/* 1 */,
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(2)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  left: 0;\n  right: 0;\n  width: 100%;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 11px;\n  display: flex;\n  justify-content: space-between;\n  background-color: rgba(0, 0, 0, 0.9); }\n  .anim-panel > .js-slider {\n    margin-top: 8px; }\n\n.anim-panel__control-set {\n  display: flex; }\n\n.anim-panel__timescale-set {\n  display: flex; }\n\n.anim-panel__loop-set {\n  display: flex; }\n\n.anim-panel__slider-set {\n  flex: 1;\n  padding-top: 18px; }\n\n.anim-panel__button {\n  width: 43px;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n  text-indent: -9999px; }\n  .anim-panel__button:hover {\n    background-color: rgba(255, 255, 255, 0.05); }\n\n.anim-panel__button--play {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>play</title><polygon points=\"20.657 14.5 11 20.157 11 8.843 20.657 14.5\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--pause {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>pause</title><rect x=\"10\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/><rect x=\"18\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--restart {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--labels {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n@keyframes active-control {\n  0%, 100% {\n    opacity: 1; }\n  50% {\n    opacity: 0.3; } }\n\n.anim-panel__timescale-button {\n  margin: 0;\n  padding: 15px 12px;\n  text-align: center;\n  cursor: pointer;\n  color: #666; }\n  .anim-panel__timescale-button:hover {\n    color: #aaa; }\n  .anim-panel__timescale-button.is-active {\n    color: #fff; }\n\n.anim-panel__dropdown {\n  position: relative; }\n\n.anim-panel__dropdown-options {\n  position: absolute;\n  background-color: red;\n  display: none; }\n  .anim-panel__dropdown-options > p {\n    margin: 0;\n    padding: 11px 14px;\n    color: #fff;\n    background-color: #555;\n    cursor: pointer; }\n  .anim-panel__dropdown-options > p:hover {\n    background-color: #444; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-labels-button {\n  background-color: #333; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-options {\n  display: block; }\n\n.anim-panel__time {\n  width: 60px;\n  margin: 0; }\n  .anim-panel__time > p {\n    margin: 0;\n    margin-top: 14px;\n    margin-left: 17px;\n    color: #fff; }\n\n.anim-panel__slider-track {\n  width: 100%;\n  height: 6px;\n  border-radius: 3px;\n  background-color: rgba(255, 255, 255, 0.3); }\n\n.anim-panel__slider-playhead {\n  width: 6px;\n  height: 6px;\n  display: block;\n  border-radius: 3px;\n  background-color: #fff;\n  transform-origin: 50% 50%;\n  position: relative;\n  cursor: pointer; }\n", ""]);
+
+	// exports
+
+
+/***/ },
 /* 2 */
 /***/ function(module, exports) {
 
@@ -364,22 +378,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 3 */,
-/* 4 */
+/* 3 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__button anim-panel__button--play js-play\" title=\"Play\">Play</p>\n  <p class=\"anim-panel__button anim-panel__button--pause js-pause\" title=\"Pause\">Pause</p>\n  <p class=\"anim-panel__button anim-panel__button--restart js-restart\" title=\"Restart\">Restart</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"2\">2x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels\">\n  <div class=\"anim-panel__dropdown js-anim-panel-dropdown\">\n    <div class=\"anim-panel__button anim-panel__button--labels js-anim-panel-dropdown-trigger\">L</div>\n    <div class=\"anim-panel__dropdown-options js-anim-panel-labels js-anim-panel-dropdown-options\"></div>\n  </div>\n</div>\n\n<div class=\"anim-panel__slider-set\">\n  <div class=\"anim-panel__slider js-anim-panel-slider\">\n    <div class=\"anim-panel__slider-track js-anim-panel-slider-track\">\n      <span class=\"anim-panel__slider-playhead js-anim-panel-slider-playhead\"></span>\n    </div>\n  </div>\n</div>\n\n<div class=\"anim-panel__time\">\n  <p class=\"js-time\">0</p>\n</div>\n";
 
 /***/ },
-/* 5 */,
-/* 6 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;var require;/* WEBPACK VAR INJECTION */(function(global) {/*!
 	    localForage -- Offline Storage, Improved
-	    Version 1.4.3
+	    Version 1.4.2
 	    https://mozilla.github.io/localForage
-	    (c) 2013-2016 Mozilla, Apache License 2.0
+	    (c) 2013-2015 Mozilla, Apache License 2.0
 	*/
 	(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.localforage = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw (f.code="MODULE_NOT_FOUND", f)}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 	'use strict';
@@ -720,29 +732,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	},{"1":1}],4:[function(_dereq_,module,exports){
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function getIDB() {
 	    /* global indexedDB,webkitIndexedDB,mozIndexedDB,OIndexedDB,msIndexedDB */
-	    try {
-	        if (typeof indexedDB !== 'undefined') {
-	            return indexedDB;
-	        }
-	        if (typeof webkitIndexedDB !== 'undefined') {
-	            return webkitIndexedDB;
-	        }
-	        if (typeof mozIndexedDB !== 'undefined') {
-	            return mozIndexedDB;
-	        }
-	        if (typeof OIndexedDB !== 'undefined') {
-	            return OIndexedDB;
-	        }
-	        if (typeof msIndexedDB !== 'undefined') {
-	            return msIndexedDB;
-	        }
-	    } catch (e) {}
+	    if (typeof indexedDB !== 'undefined') {
+	        return indexedDB;
+	    }
+	    if (typeof webkitIndexedDB !== 'undefined') {
+	        return webkitIndexedDB;
+	    }
+	    if (typeof mozIndexedDB !== 'undefined') {
+	        return mozIndexedDB;
+	    }
+	    if (typeof OIndexedDB !== 'undefined') {
+	        return OIndexedDB;
+	    }
+	    if (typeof msIndexedDB !== 'undefined') {
+	        return msIndexedDB;
+	    }
 	}
 
 	var idb = getIDB();
@@ -832,23 +842,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}
 
-	function executeTwoCallbacks(promise, callback, errorCallback) {
-	    if (typeof callback === 'function') {
-	        promise.then(callback);
-	    }
-
-	    if (typeof errorCallback === 'function') {
-	        promise["catch"](errorCallback);
-	    }
-	}
-
 	// Some code originally from async_storage.js in
 	// [Gaia](https://github.com/mozilla-b2g/gaia).
 
 	var DETECT_BLOB_SUPPORT_STORE = 'local-forage-detect-blob-support';
 	var supportsBlobs;
 	var dbContexts;
-	var toString = Object.prototype.toString;
 
 	// Transform a binary string to an array buffer, because otherwise
 	// weird stuff happens when you try to work with the binary string directly.
@@ -1088,7 +1087,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    });
 
-	    executeTwoCallbacks(promise, callback, callback);
+	    promise.then(callback, callback);
 	    return promise;
 	}
 
@@ -1279,7 +1278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var dbInfo;
 	        self.ready().then(function () {
 	            dbInfo = self._dbInfo;
-	            if (toString.call(value) === '[object Blob]') {
+	            if (value instanceof Blob) {
 	                return _checkBlobSupport(dbInfo.db).then(function (blobSupport) {
 	                    if (blobSupport) {
 	                        return value;
@@ -1539,8 +1538,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var TYPE_FLOAT64ARRAY = 'fl64';
 	var TYPE_SERIALIZED_MARKER_LENGTH = SERIALIZED_MARKER_LENGTH + TYPE_ARRAYBUFFER.length;
 
-	var toString$1 = Object.prototype.toString;
-
 	function stringToBuffer(serializedString) {
 	    // Fill the string into a ArrayBuffer.
 	    var bufferLength = serializedString.length * 0.75;
@@ -1602,16 +1599,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	// instructs the `setItem()` callback/promise to be executed). This is how
 	// we store binary data with localStorage.
 	function serialize(value, callback) {
-	    var valueType = '';
+	    var valueString = '';
 	    if (value) {
-	        valueType = toString$1.call(value);
+	        valueString = value.toString();
 	    }
 
 	    // Cannot use `value instanceof ArrayBuffer` or such here, as these
 	    // checks fail when running the tests using casper.js...
 	    //
 	    // TODO: See why those tests fail and use a better solution.
-	    if (value && (valueType === '[object ArrayBuffer]' || value.buffer && toString$1.call(value.buffer) === '[object ArrayBuffer]')) {
+	    if (value && (value.toString() === '[object ArrayBuffer]' || value.buffer && value.buffer.toString() === '[object ArrayBuffer]')) {
 	        // Convert binary arrays to a string and prefix the string with
 	        // a special marker.
 	        var buffer;
@@ -1623,23 +1620,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            buffer = value.buffer;
 
-	            if (valueType === '[object Int8Array]') {
+	            if (valueString === '[object Int8Array]') {
 	                marker += TYPE_INT8ARRAY;
-	            } else if (valueType === '[object Uint8Array]') {
+	            } else if (valueString === '[object Uint8Array]') {
 	                marker += TYPE_UINT8ARRAY;
-	            } else if (valueType === '[object Uint8ClampedArray]') {
+	            } else if (valueString === '[object Uint8ClampedArray]') {
 	                marker += TYPE_UINT8CLAMPEDARRAY;
-	            } else if (valueType === '[object Int16Array]') {
+	            } else if (valueString === '[object Int16Array]') {
 	                marker += TYPE_INT16ARRAY;
-	            } else if (valueType === '[object Uint16Array]') {
+	            } else if (valueString === '[object Uint16Array]') {
 	                marker += TYPE_UINT16ARRAY;
-	            } else if (valueType === '[object Int32Array]') {
+	            } else if (valueString === '[object Int32Array]') {
 	                marker += TYPE_INT32ARRAY;
-	            } else if (valueType === '[object Uint32Array]') {
+	            } else if (valueString === '[object Uint32Array]') {
 	                marker += TYPE_UINT32ARRAY;
-	            } else if (valueType === '[object Float32Array]') {
+	            } else if (valueString === '[object Float32Array]') {
 	                marker += TYPE_FLOAT32ARRAY;
-	            } else if (valueType === '[object Float64Array]') {
+	            } else if (valueString === '[object Float64Array]') {
 	                marker += TYPE_FLOAT64ARRAY;
 	            } else {
 	                callback(new Error('Failed to get type for BinaryArray'));
@@ -1647,7 +1644,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        callback(marker + bufferToString(buffer));
-	    } else if (valueType === '[object Blob]') {
+	    } else if (valueString === '[object Blob]') {
 	        // Conver the blob to a binaryArray and then to a string.
 	        var fileReader = new FileReader();
 
@@ -2318,6 +2315,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    keys: keys$2
 	};
 
+	function executeTwoCallbacks(promise, callback, errorCallback) {
+	    if (typeof callback === 'function') {
+	        promise.then(callback);
+	    }
+
+	    if (typeof errorCallback === 'function') {
+	        promise["catch"](errorCallback);
+	    }
+	}
+
 	// Custom drivers are stored here when `defineDriver()` is called.
 	// They are shared across all instances of localForage.
 	var CustomDrivers = {};
@@ -2679,24 +2686,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 7 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(2)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  left: 0;\n  right: 0;\n  width: 100%;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 11px;\n  display: flex;\n  justify-content: space-between;\n  background-color: rgba(0, 0, 0, 0.9); }\n  .anim-panel > .js-slider {\n    margin-top: 8px; }\n\n.anim-panel__control-set {\n  display: flex; }\n\n.anim-panel__timescale-set {\n  display: flex; }\n\n.anim-panel__loop-set {\n  display: flex; }\n\n.anim-panel__slider-set {\n  flex: 1;\n  padding-top: 18px; }\n\n.anim-panel__button {\n  width: 43px;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n  text-indent: -9999px; }\n  .anim-panel__button:hover {\n    background-color: rgba(255, 255, 255, 0.05); }\n\n.anim-panel__button--play {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>play</title><polygon points=\"20.657 14.5 11 20.157 11 8.843 20.657 14.5\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--pause {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>pause</title><rect x=\"10\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/><rect x=\"18\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--restart {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--labels {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n@keyframes active-control {\n  0%, 100% {\n    opacity: 1; }\n  50% {\n    opacity: 0.3; } }\n\n.anim-panel__timescale-button {\n  margin: 0;\n  padding: 15px 12px;\n  text-align: center;\n  cursor: pointer;\n  color: #666; }\n  .anim-panel__timescale-button:hover {\n    color: #aaa; }\n  .anim-panel__timescale-button.is-active {\n    color: #fff; }\n\n.anim-panel__dropdown {\n  position: relative; }\n\n.anim-panel__dropdown-options {\n  position: absolute;\n  background-color: red;\n  display: none; }\n  .anim-panel__dropdown-options > p {\n    margin: 0;\n    padding: 11px 14px;\n    color: #fff;\n    background-color: #555;\n    cursor: pointer; }\n  .anim-panel__dropdown-options > p:hover {\n    background-color: #444; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-labels-button {\n  background-color: #333; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-options {\n  display: block; }\n\n.anim-panel__time {\n  width: 60px;\n  margin: 0; }\n  .anim-panel__time > p {\n    margin: 0;\n    margin-top: 14px;\n    margin-left: 17px;\n    color: #fff; }\n\n.anim-panel__slider-track {\n  width: 100%;\n  height: 6px;\n  border-radius: 3px;\n  background-color: rgba(255, 255, 255, 0.3); }\n\n.anim-panel__slider-playhead {\n  width: 6px;\n  height: 6px;\n  display: block;\n  border-radius: 3px;\n  background-color: #fff;\n  transform-origin: 50% 50%;\n  position: relative;\n  cursor: pointer; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Draggabilly = __webpack_require__(9);
+	var Draggabilly = __webpack_require__(6);
 
 	module.exports = function(timeline) {
 	  //
@@ -2708,7 +2701,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    sliderSelector: '.js-anim-panel-slider',
 	    sliderTrackSelector: '.js-anim-panel-slider-track',
 	    sliderPlayheadSelector: '.js-anim-panel-slider-playhead',
-	    draggable: null
+	    draggable: null,
+	    isDragging: false
 	  };
 	 
 	 
@@ -2732,6 +2726,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var _addEventListeners = function() {
 	    self.draggable.on('pointerDown', function(evt, poitner) {
 	      timeline.pause();
+	      self.isDragging = true;
+	    });
+	    
+	    self.draggable.on('pointerUp', function(evt, poitner) {
+	      self.isDragging = false;
 	    });
 
 	    self.draggable.on('dragMove', function(evt, pointer, moveVector) {
@@ -2781,7 +2780,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 9 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -2799,8 +2798,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if ( true ) {
 	    // AMD
 	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	        __webpack_require__(10),
-	        __webpack_require__(11)
+	        __webpack_require__(7),
+	        __webpack_require__(8)
 	      ], __WEBPACK_AMD_DEFINE_RESULT__ = function( getSize, Unidragger ) {
 	        return factory( window, getSize, Unidragger );
 	      }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -3262,7 +3261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -3477,7 +3476,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -3495,7 +3494,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if ( true ) {
 	    // AMD
 	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	      __webpack_require__(12)
+	      __webpack_require__(9)
 	    ], __WEBPACK_AMD_DEFINE_RESULT__ = function( Unipointer ) {
 	      return factory( window, Unipointer );
 	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -3767,7 +3766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -3784,7 +3783,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if ( true ) {
 	    // AMD
 	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	      __webpack_require__(13)
+	      __webpack_require__(10)
 	    ], __WEBPACK_AMD_DEFINE_RESULT__ = function( EvEmitter ) {
 	      return factory( window, EvEmitter );
 	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -4076,7 +4075,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**

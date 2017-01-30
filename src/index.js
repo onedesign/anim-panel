@@ -216,6 +216,7 @@ module.exports = function(timeline, options) {
         }
 
         // TODO: Update slider based on timeline
+        if (self.progress.isDragging) return;
         var progressPercentage = timeline.progress() * 100;
         self.progress.setPercentage(progressPercentage);
       };
