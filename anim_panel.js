@@ -85,9 +85,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        dropdownSelector: '.js-anim-panel-dropdown',
 	        dropdownTriggerSelector: '.js-anim-panel-dropdown-trigger',
 	        dropdownOptionsSelector: '.js-anim-panel-dropdown-options',
-	        progress: null,
-	        loopIn: null,
-	        loopOut: null
+	        progress: null
 	      };
 	     
 	     
@@ -118,7 +116,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _addStyles();
 	        _addProgress();
 	        _addLabelButtons();
-	        _setLoop();
 	        _addEventListeners();
 	        _updatePlayPauseState();
 	      };
@@ -179,24 +176,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          })
 	        });
 	      };
-
-	      var _setLoop = function() {
-	        // Set default values
-	        _setLoopDefaults();
-
-	        // Check for local storage values
-	        localforage.getItem('loopIn', function(err, val) {
-	          if (val) {
-	            self.loopIn = val;
-	            timeline.time(self.loopIn);
-	          }
-	        });
-	        localforage.getItem('loopOut', function(err, val) {
-	          if (val) {
-	            self.loopOut = val;
-	          }
-	        });
-	      };
 	     
 	      var _addEventListeners = function() {
 	        // Playback Controls
@@ -231,31 +210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var _restart = function(evt) {
 	        timeline.timeScale(1);
-	        timeline.time(self.loopIn);
-	      };
-
-	      var _setLoopIn = function(time) {
-	        localforage.setItem('loopIn', time, function(err, val) {});
-	        self.loopIn = time;
-	        console.log('Loop In Set: ', time);
-	      };
-
-	      var _setLoopOut = function(time) {
-	        localforage.setItem('loopOut', time, function(err, val) {});
-	        self.loopOut = time;
-	        console.log('Loop Out Set: ', time);
-	      };
-
-	      var _clearLoop = function(evt) {
-	        localforage.setItem('loopIn', null, function(err, val) {});
-	        localforage.setItem('loopOut', null, function(err, val) {});
-	        _setLoopDefaults();
-	      };
-
-	      var _setLoopDefaults = function(evt) {
-	        self.loopIn = 0;
-	        self.loopOut = timeline.totalDuration();
-	        console.log('Loop Reset: In ' + self.loopIn + ', Out ' + self.loopOut);
+	        timeline.time(self.progress.loopIn);
 	      };
 
 	      var _toggleDropdown = function(evt) {
@@ -268,8 +223,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _updateTime(timeline.totalTime());
 
 	        // If we're at the loop out point, jump to the loop in point
-	        if (timeline.totalTime() >= self.loopOut) {
-	          timeline.time(self.loopIn);
+	        if (timeline.totalTime() >= self.progress.loopOut) {
+	          timeline.time(self.progress.loopIn);
 	        }
 
 	        // Update slider based on timeline
@@ -342,7 +297,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  left: 0;\n  right: 0;\n  width: 100%;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 11px;\n  display: flex;\n  justify-content: space-between;\n  background-color: rgba(0, 0, 0, 0.9); }\n  .anim-panel > .js-slider {\n    margin-top: 8px; }\n\n.anim-panel__control-set {\n  display: flex; }\n\n.anim-panel__timescale-set {\n  display: flex; }\n\n.anim-panel__loop-set {\n  display: flex; }\n\n.anim-panel__slider-set {\n  flex: 1; }\n\n.anim-panel__button {\n  width: 43px;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n  text-indent: -9999px; }\n  .anim-panel__button:hover {\n    background-color: rgba(255, 255, 255, 0.05); }\n\n.anim-panel__button--play-pause {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>play</title><polygon points=\"20.657 14.5 11 20.157 11 8.843 20.657 14.5\" style=\"fill:#fff\"/></svg>'); }\n  .anim-panel__button--play-pause.is-playing {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>pause</title><rect x=\"10\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/><rect x=\"18\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--restart {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--labels {\n  background-image: url('data:image/svg+xml;utf8,<svg id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"> <path fill=\"#fff\" d=\"M20 20l-5-4-5 4V9h10z\"/></svg>'); }\n\n@keyframes active-control {\n  0%, 100% {\n    opacity: 1; }\n  50% {\n    opacity: 0.3; } }\n\n.anim-panel__timescale-button {\n  margin: 0;\n  padding: 15px 12px;\n  text-align: center;\n  cursor: pointer;\n  color: #666; }\n  .anim-panel__timescale-button:hover {\n    color: #aaa; }\n  .anim-panel__timescale-button.is-active {\n    color: #fff; }\n\n.anim-panel__dropdown {\n  position: relative; }\n\n.anim-panel__dropdown-options {\n  position: absolute;\n  background-color: red;\n  display: none; }\n  .anim-panel__dropdown-options > p {\n    margin: 0;\n    padding: 11px 14px;\n    color: #fff;\n    background-color: #555;\n    cursor: pointer; }\n  .anim-panel__dropdown-options > p:hover {\n    background-color: #444; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-labels-button {\n  background-color: #333; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-options {\n  display: block; }\n\n.anim-panel__time {\n  width: 60px;\n  margin: 0; }\n  .anim-panel__time > p {\n    margin: 0;\n    margin-top: 14px;\n    margin-left: 17px;\n    color: #fff; }\n\n.anim-panel__slider-track {\n  width: 100%;\n  height: 42px;\n  position: relative; }\n  .anim-panel__slider-track:before {\n    content: \"\";\n    display: block;\n    position: absolute;\n    height: 6px;\n    left: 18px;\n    right: 18px;\n    top: 18px;\n    background-color: rgba(255, 255, 255, 0.3);\n    border-radius: 3px; }\n\n.anim-panel__slider-playhead {\n  width: 42px;\n  height: 42px;\n  display: block;\n  position: relative;\n  cursor: pointer; }\n  .anim-panel__slider-playhead:before {\n    content: \"\";\n    display: block;\n    width: 6px;\n    height: 6px;\n    border-radius: 3px;\n    background-color: #fff;\n    transform-origin: 50% 50%;\n    position: absolute;\n    left: 18px;\n    top: 18px;\n    transition: transform 0.2s; }\n\n.anim-panel__slider:hover .anim-panel__slider-playhead:before {\n  transform: scale(2.5); }\n", ""]);
+	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  left: 0;\n  right: 0;\n  width: 100%;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 11px;\n  display: flex;\n  justify-content: space-between;\n  background-color: rgba(0, 0, 0, 0.9); }\n  .anim-panel > .js-slider {\n    margin-top: 8px; }\n\n.anim-panel__control-set {\n  display: flex; }\n\n.anim-panel__timescale-set {\n  display: flex; }\n\n.anim-panel__loop-set {\n  display: flex; }\n\n.anim-panel__slider-set {\n  flex: 1; }\n\n.anim-panel__button {\n  width: 43px;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n  text-indent: -9999px; }\n  .anim-panel__button:hover {\n    background-color: rgba(255, 255, 255, 0.05); }\n\n.anim-panel__button--play-pause {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>play</title><polygon points=\"20.657 14.5 11 20.157 11 8.843 20.657 14.5\" style=\"fill:#fff\"/></svg>'); }\n  .anim-panel__button--play-pause.is-playing {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>pause</title><rect x=\"10\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/><rect x=\"18\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--restart {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--labels {\n  background-image: url('data:image/svg+xml;utf8,<svg id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"> <path fill=\"#fff\" d=\"M20 20l-5-4-5 4V9h10z\"/></svg>'); }\n\n@keyframes active-control {\n  0%, 100% {\n    opacity: 1; }\n  50% {\n    opacity: 0.3; } }\n\n.anim-panel__timescale-button {\n  margin: 0;\n  padding: 15px 12px;\n  text-align: center;\n  cursor: pointer;\n  color: #666; }\n  .anim-panel__timescale-button:hover {\n    color: #aaa; }\n  .anim-panel__timescale-button.is-active {\n    color: #fff; }\n\n.anim-panel__dropdown {\n  position: relative; }\n\n.anim-panel__dropdown-options {\n  position: absolute;\n  background-color: red;\n  display: none; }\n  .anim-panel__dropdown-options > p {\n    margin: 0;\n    padding: 11px 14px;\n    color: #fff;\n    background-color: #555;\n    cursor: pointer; }\n  .anim-panel__dropdown-options > p:hover {\n    background-color: #444; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-labels-button {\n  background-color: #333; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-options {\n  display: block; }\n\n.anim-panel__time {\n  width: 60px;\n  margin: 0; }\n  .anim-panel__time > p {\n    margin: 0;\n    margin-top: 14px;\n    margin-left: 17px;\n    color: #fff; }\n\n.anim-panel__slider-track {\n  width: 100%;\n  height: 42px;\n  position: relative; }\n  .anim-panel__slider-track:before {\n    content: \"\";\n    display: block;\n    position: absolute;\n    height: 6px;\n    left: 18px;\n    right: 18px;\n    top: 18px;\n    background-color: rgba(255, 255, 255, 0.3);\n    border-radius: 3px; }\n\n.anim-panel__slider-playhead {\n  width: 42px;\n  height: 42px;\n  display: block;\n  position: relative;\n  cursor: pointer; }\n  .anim-panel__slider-playhead:before {\n    content: \"\";\n    display: block;\n    width: 6px;\n    height: 6px;\n    border-radius: 3px;\n    background-color: #fff;\n    transform-origin: 50% 50%;\n    position: absolute;\n    left: 18px;\n    top: 18px;\n    transition: transform 0.2s; }\n\n.anim-panel__slider-range-handle {\n  width: 26px;\n  height: 24px;\n  display: block;\n  position: absolute;\n  top: 8px;\n  cursor: pointer; }\n  .anim-panel__slider-range-handle:after {\n    content: \"\";\n    display: block;\n    position: absolute;\n    width: 6px;\n    height: 24px;\n    background-color: magenta; }\n  .anim-panel__slider-range-handle:nth-child(1):after {\n    left: 10px;\n    border-top-left-radius: 4px;\n    border-bottom-left-radius: 4px; }\n  .anim-panel__slider-range-handle:nth-child(2) {\n    right: 0; }\n    .anim-panel__slider-range-handle:nth-child(2):after {\n      right: 10px;\n      border-top-right-radius: 4px;\n      border-bottom-right-radius: 2px; }\n\n.anim-panel__slider:hover .anim-panel__slider-playhead:before {\n  transform: scale(2.5); }\n", ""]);
 
 	// exports
 
@@ -407,7 +362,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__button anim-panel__button--play-pause js-play-pause\" title=\"Play/Pause\">Play/Pause</p>\n  <p class=\"anim-panel__button anim-panel__button--restart js-restart\" title=\"Restart\">Restart</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels\">\n  <div class=\"anim-panel__dropdown js-anim-panel-dropdown\">\n    <div class=\"anim-panel__button anim-panel__button--labels js-anim-panel-dropdown-trigger\">L</div>\n    <div class=\"anim-panel__dropdown-options js-anim-panel-labels js-anim-panel-dropdown-options\"></div>\n  </div>\n</div>\n\n<div class=\"anim-panel__slider-set\">\n  <div class=\"anim-panel__slider js-anim-panel-slider\">\n    <div class=\"anim-panel__slider-track js-anim-panel-slider-track\">\n      <span class=\"anim-panel__slider-playhead js-anim-panel-slider-playhead\"></span>\n    </div>\n  </div>\n</div>\n\n<div class=\"anim-panel__time\">\n  <p class=\"js-time\">0</p>\n</div>\n";
+	module.exports = "<div class=\"anim-panel__control-set\">\n  <p class=\"anim-panel__button anim-panel__button--play-pause js-play-pause\" title=\"Play/Pause\">Play/Pause</p>\n  <p class=\"anim-panel__button anim-panel__button--restart js-restart\" title=\"Restart\">Restart</p>  \n</div>\n\n<div class=\"anim-panel__timescale-set\">\n  <p class=\"anim-panel__timescale-button js-timescale is-active\" data-timescale=\"1\">1x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.5\">0.5x</p>\n  <p class=\"anim-panel__timescale-button js-timescale\" data-timescale=\"0.25\">0.25x</p>\n</div>\n\n<div class=\"anim-panel__labels\">\n  <div class=\"anim-panel__dropdown js-anim-panel-dropdown\">\n    <div class=\"anim-panel__button anim-panel__button--labels js-anim-panel-dropdown-trigger\">L</div>\n    <div class=\"anim-panel__dropdown-options js-anim-panel-labels js-anim-panel-dropdown-options\"></div>\n  </div>\n</div>\n\n<div class=\"anim-panel__slider-set\">\n  <div class=\"anim-panel__slider js-anim-panel-slider\">\n    <div class=\"anim-panel__slider-track js-anim-panel-slider-track\">\n      <div class=\"anim-panel__slider-range\">\n        <span class=\"anim-panel__slider-range-handle js-anim-panel-slider-range-handle-start\"></span>\n        <span class=\"anim-panel__slider-range-handle js-anim-panel-slider-range-handle-end\"></span>\n      </div>\n      <span class=\"anim-panel__slider-playhead js-anim-panel-slider-playhead\"></span>\n    </div>\n  </div>\n</div>\n\n<div class=\"anim-panel__time\">\n  <p class=\"js-time\">0</p>\n</div>\n";
 
 /***/ },
 /* 4 */
@@ -2721,6 +2676,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var Draggabilly = __webpack_require__(6);
+	var localforage = __webpack_require__(4);
 
 	module.exports = function(timeline, options) {
 	  //
@@ -2732,8 +2688,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    sliderSelector: '.js-anim-panel-slider',
 	    sliderTrackSelector: '.js-anim-panel-slider-track',
 	    sliderPlayheadSelector: '.js-anim-panel-slider-playhead',
-	    draggable: null,
-	    isDragging: false
+	    sliderRangeStartSelector: '.js-anim-panel-slider-range-handle-start',
+	    sliderRangeEndSelector: '.js-anim-panel-slider-range-handle-end',
+	    draggablePlayhead: null,
+	    isDragging: false,
+	    loopIn: null,
+	    loopOut: null
 	  };
 	 
 	 
@@ -2743,30 +2703,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	  //////////////////////////////////////////////////////////////////////
 	 
 	  var _init = function() {
-	    _createDraggable();
+	    _createDraggables();
 	    _addEventListeners();
+	    _setLoop();
 	  };
 
-	  var _createDraggable = function() {
-	    self.draggable = new Draggabilly(self.sliderPlayheadSelector, {
+	  var _createDraggables = function() {
+	    self.draggablePlayhead = new Draggabilly(self.sliderPlayheadSelector, {
+	      containment: self.sliderTrackSelector,
+	      axis: 'x'
+	    });
+
+	    self.draggableStart = new Draggabilly(self.sliderRangeStartSelector, {
+	      containment: self.sliderTrackSelector,
+	      axis: 'x'
+	    });
+
+	    self.draggableEnd = new Draggabilly(self.sliderRangeEndSelector, {
 	      containment: self.sliderTrackSelector,
 	      axis: 'x'
 	    });
 	  };
 	 
 	  var _addEventListeners = function() {
-	    self.draggable.on('pointerDown', function(evt, poitner) {
+	    self.draggablePlayhead.on('pointerDown', function(evt, poitner) {
 	      timeline.pause(); 
 	      _playPauseCallback();
 	      self.isDragging = true;
 	    });
 
-	    self.draggable.on('pointerUp', function(evt, poitner) {
+	    self.draggablePlayhead.on('pointerUp', function(evt, poitner) {
 	      self.isDragging = false;
 	    });
 
-	    self.draggable.on('dragMove', function(evt, pointer, moveVector) {
+	    self.draggablePlayhead.on('dragMove', function(evt, pointer, moveVector) {
 	      timeline.progress(_getProgressPercentage()).pause();
+	    });
+
+	    self.draggableStart.on('dragMove', function(evt, pointer, moveVector) {
+	      _setLoopIn(_getTimeFromDraggablePosition(self.draggableStart));
+	      timeline.pause();
+	      _playPauseCallback();
+	      timeline.seek(self.loopIn);
+	    });
+
+	    self.draggableEnd.on('dragMove', function(evt, pointer, moveVector) {
+	      _setLoopOut(_getTimeFromDraggablePosition(self.draggableEnd));
+	      timeline.pause();
+	      _playPauseCallback();
+	      timeline.seek(self.loopOut);
 	    });
 
 	    document.querySelector(self.sliderTrackSelector).addEventListener('click', _trackClicked.bind(self));
@@ -2774,30 +2759,109 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var _trackClicked = function(evt) {
 	    if (evt.target === document.querySelector(self.sliderPlayheadSelector)) return;
+	    if (evt.target === document.querySelector(self.sliderRangeStartSelector)) return;
+	    if (evt.target === document.querySelector(self.sliderRangeEndSelector)) return;
+
 	    var playheadWidth = document.querySelector(self.sliderPlayheadSelector).offsetWidth;
 	    var clickPos = evt.offsetX - playheadWidth / 2;
-	    var progressPercentage = clickPos / _getMaxPosition() * 100;
+	    var progressPercentage = clickPos / _getMaxPlayheadPosition() * 100;
 	    self.setPercentage(progressPercentage);
 	    timeline.progress(_getProgressPercentage()).pause();
 	    _playPauseCallback();
 	  };
 
-	  var _getMaxPosition = function() {
+	  var _getMaxPlayheadPosition = function() {
 	    var playheadWidth = document.querySelector(self.sliderPlayheadSelector).offsetWidth;
 	    var trackWidth = document.querySelector(self.sliderTrackSelector).offsetWidth;
 	    var max = trackWidth - playheadWidth;
 	    return max;
 	  };
 
+	  var _getMaxRangePosition = function() {
+	    var rangeWidth = document.querySelector(self.sliderRangeStartSelector).offsetWidth;
+	    var trackWidth = document.querySelector(self.sliderTrackSelector).offsetWidth;
+	    var max = trackWidth - rangeWidth;
+	    return max;
+	  };
+
 	  var _getProgressPercentage = function() {
-	    var max = _getMaxPosition();
-	    return self.draggable.position.x / max;
+	    var max = _getMaxPlayheadPosition();
+	    return self.draggablePlayhead.position.x / max;
+	  };
+
+	  var _getTimeFromDraggablePosition = function(draggable) {
+	    var positionPercentage = draggable.position.x / _getMaxRangePosition();
+	    var positionTime = timeline.totalDuration() * positionPercentage;
+	    return positionTime;
 	  };
 
 	  var _playPauseCallback = function() {
 	    if (typeof options !== 'undefined' && typeof options.onPlayPause === 'function') {
 	      options.onPlayPause();
 	    }
+	  };
+
+	  var _setLoop = function() {
+	    // Set default values
+	    _setLoopDefaults();
+
+	    // Check for local storage values
+	    localforage.getItem('loopIn', function(err, val) {
+	      if (val) {
+	        self.loopIn = val;
+	        timeline.time(self.loopIn);
+	        _setRangePositions();
+	      }
+	    });
+	    localforage.getItem('loopOut', function(err, val) {
+	      if (val) {
+	        self.loopOut = val;
+	        _setRangePositions();
+	      }
+	    });
+	  };
+
+	  var _setRangePositions = function() {
+	    var startPosition = _getRangeHandlePositionFromTime(self.loopIn);
+	    var endPosition = _getRangeHandlePositionFromTime(self.loopOut);
+	    var rangeStartEl = document.querySelector(self.sliderRangeStartSelector);
+	    var rangeEndEl = document.querySelector(self.sliderRangeEndSelector);
+
+	    self.draggableStart.position.x = startPosition;
+	    rangeStartEl.style.left = startPosition + 'px';
+
+	    self.draggableEnd.position.x = endPosition;
+	    rangeEndEl.style.left = endPosition + 'px';
+	  };
+
+	  var _setLoopIn = function(time) {
+	    localforage.setItem('loopIn', time, function(err, val) {});
+	    self.loopIn = time;
+	    console.log('Loop In Set: ', time);
+	  };
+
+	  var _setLoopOut = function(time) {
+	    localforage.setItem('loopOut', time, function(err, val) {});
+	    self.loopOut = time;
+	    console.log('Loop Out Set: ', time);
+	  };
+
+	  var _clearLoop = function(evt) {
+	    localforage.setItem('loopIn', null, function(err, val) {});
+	    localforage.setItem('loopOut', null, function(err, val) {});
+	    _setLoopDefaults();
+	  };
+
+	  var _setLoopDefaults = function(evt) {
+	    self.loopIn = 0;
+	    self.loopOut = timeline.totalDuration();
+	    console.log('Loop Reset: In ' + self.loopIn + ', Out ' + self.loopOut);
+	  };
+
+	  var _getRangeHandlePositionFromTime = function(time) {
+	    var timePercentage = time / timeline.totalDuration();
+	    var position = timePercentage * _getMaxRangePosition();
+	    return position;
 	  };
 	 
 	 
@@ -2808,10 +2872,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  
 	  
 	  self.setPercentage = function(percentage) {
-	    var max = _getMaxPosition();
+	    var max = _getMaxPlayheadPosition();
 	    var playheadEl = document.querySelector(self.sliderPlayheadSelector);
 	    var position = max * (percentage / 100);
-	    self.draggable.position.x = position;
+	    self.draggablePlayhead.position.x = position;
 	    playheadEl.style.left = position + 'px';
 	  };
 	  

@@ -46,6 +46,52 @@
       }
     }
 
+    .anim-panel__slider-range {
+      
+    }
+
+    .anim-panel__slider-range-handle {
+      width: 26px;
+      height: 24px;
+      display: block;
+      position: absolute;
+      top: 8px;
+      cursor: pointer;
+
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 6px;
+        height: 24px;
+        background-color: magenta;
+      }
+
+      &:nth-child(1) {
+
+        &:after {
+          left: 10px;
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+        }
+      }
+
+      &:nth-child(2) {
+        right: 0;
+
+        &:after {
+          right: 10px;
+          border-top-right-radius: 4px;
+          border-bottom-right-radius: 2px;
+        }
+      }
+    }
+
+
+//
+// State
+//
+
 .anim-panel__slider:hover .anim-panel__slider-playhead:before {
   transform: scale(2.5);
 }

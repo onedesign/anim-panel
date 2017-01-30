@@ -29,9 +29,7 @@ module.exports = function(timeline, options) {
         dropdownSelector: '.js-anim-panel-dropdown',
         dropdownTriggerSelector: '.js-anim-panel-dropdown-trigger',
         dropdownOptionsSelector: '.js-anim-panel-dropdown-options',
-        progress: null,
-        loopIn: null,
-        loopOut: null
+        progress: null
       };
      
      
@@ -62,7 +60,6 @@ module.exports = function(timeline, options) {
         _addStyles();
         _addProgress();
         _addLabelButtons();
-        _setLoop();
         _addEventListeners();
         _updatePlayPauseState();
       };
@@ -123,24 +120,6 @@ module.exports = function(timeline, options) {
           })
         });
       };
-
-      var _setLoop = function() {
-        // Set default values
-        _setLoopDefaults();
-
-        // Check for local storage values
-        localforage.getItem('loopIn', function(err, val) {
-          if (val) {
-            self.loopIn = val;
-            timeline.time(self.loopIn);
-          }
-        });
-        localforage.getItem('loopOut', function(err, val) {
-          if (val) {
-            self.loopOut = val;
-          }
-        });
-      };
      
       var _addEventListeners = function() {
         // Playback Controls
@@ -175,31 +154,7 @@ module.exports = function(timeline, options) {
 
       var _restart = function(evt) {
         timeline.timeScale(1);
-        timeline.time(self.loopIn);
-      };
-
-      var _setLoopIn = function(time) {
-        localforage.setItem('loopIn', time, function(err, val) {});
-        self.loopIn = time;
-        console.log('Loop In Set: ', time);
-      };
-
-      var _setLoopOut = function(time) {
-        localforage.setItem('loopOut', time, function(err, val) {});
-        self.loopOut = time;
-        console.log('Loop Out Set: ', time);
-      };
-
-      var _clearLoop = function(evt) {
-        localforage.setItem('loopIn', null, function(err, val) {});
-        localforage.setItem('loopOut', null, function(err, val) {});
-        _setLoopDefaults();
-      };
-
-      var _setLoopDefaults = function(evt) {
-        self.loopIn = 0;
-        self.loopOut = timeline.totalDuration();
-        console.log('Loop Reset: In ' + self.loopIn + ', Out ' + self.loopOut);
+        timeline.time(self.progress.loopIn);
       };
 
       var _toggleDropdown = function(evt) {
@@ -212,8 +167,8 @@ module.exports = function(timeline, options) {
         _updateTime(timeline.totalTime());
 
         // If we're at the loop out point, jump to the loop in point
-        if (timeline.totalTime() >= self.loopOut) {
-          timeline.time(self.loopIn);
+        if (timeline.totalTime() >= self.progress.loopOut) {
+          timeline.time(self.progress.loopIn);
         }
 
         // Update slider based on timeline
