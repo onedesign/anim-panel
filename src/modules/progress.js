@@ -1,6 +1,6 @@
 var Draggabilly = require('draggabilly');
 
-module.exports = function(timeline) {
+module.exports = function(timeline, options) {
   //
   //   Private Vars
   //
@@ -35,6 +35,7 @@ module.exports = function(timeline) {
   var _addEventListeners = function() {
     self.draggable.on('pointerDown', function(evt, poitner) {
       timeline.pause(); 
+      _playPauseCallback();
       self.isDragging = true;
     });
 
@@ -56,6 +57,7 @@ module.exports = function(timeline) {
     var progressPercentage = clickPos / _getMaxPosition() * 100;
     self.setPercentage(progressPercentage);
     timeline.progress(_getProgressPercentage()).pause();
+    _playPauseCallback();
   };
 
   var _getMaxPosition = function() {
@@ -68,6 +70,12 @@ module.exports = function(timeline) {
   var _getProgressPercentage = function() {
     var max = _getMaxPosition();
     return self.draggable.position.x / max;
+  };
+
+  var _playPauseCallback = function() {
+    if (typeof options !== 'undefined' && typeof options.onPlayPause === 'function') {
+      options.onPlayPause();
+    }
   };
  
  

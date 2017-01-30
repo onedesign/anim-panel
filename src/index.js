@@ -64,6 +64,7 @@ module.exports = function(timeline, options) {
         _addLabelButtons();
         _setLoop();
         _addEventListeners();
+        _updatePlayPauseState();
       };
 
       var _appendPanel = function() {
@@ -88,7 +89,9 @@ module.exports = function(timeline, options) {
       };
 
       var _addProgress = function() {
-        self.progress = new Progress(timeline);
+        self.progress = new Progress(timeline, {
+          onPlayPause: _updatePlayPauseState
+        });
       };
 
       var _addLabelButtons = function() {
@@ -116,6 +119,7 @@ module.exports = function(timeline, options) {
           labelContainer.appendChild(labelButton);
           labelButton.addEventListener('click', function(evt) {
             timeline.gotoAndPlay(label.name);
+            _updatePlayPauseState();
           })
         });
       };
@@ -163,9 +167,9 @@ module.exports = function(timeline, options) {
 
       var _togglePlay = function(evt) {
         if (timeline.paused()) {
-          timeline.play();
+          self.play();
         } else {
-          timeline.pause();
+          self.pause();
         }
       };
 
@@ -234,7 +238,32 @@ module.exports = function(timeline, options) {
         
         selectedTimescale.classList.add(self.activeTimescaleClass)
         timeline.timeScale(timescale).play();
+        _updatePlayPauseState();
       };
+
+      var _updatePlayPauseState = function() {
+        if (timeline.paused()) {
+          document.querySelector(self.playPauseSelector).classList.remove('is-playing');
+        } else {
+          document.querySelector(self.playPauseSelector).classList.add('is-playing');
+        }
+      };
+
+
+      //
+      //   Public Methods
+      //
+      //////////////////////////////////////////////////////////////////////
+
+      self.play = function() {
+        timeline.play();
+        _updatePlayPauseState();
+      }
+
+      self.pause = function() {
+        timeline.pause();
+        _updatePlayPauseState();
+      }
      
      
       //
