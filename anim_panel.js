@@ -2824,6 +2824,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Check for local storage values
 	    localforage.getItem('loopIn', function(err, val) {
 	      if (val) {
+	        if (val < 0) val = 0;
 	        self.loopIn = val;
 	        timeline.time(self.loopIn);
 	        _setRangePositions();
@@ -2831,6 +2832,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	    localforage.getItem('loopOut', function(err, val) {
 	      if (val) {
+	        if (val > timeline.totalDuration()) val = timeline.totalDuration();
 	        self.loopOut = val;
 	        _setRangePositions();
 	      }
@@ -2851,21 +2853,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  var _setLoopIn = function(time) {
+	    if (time < 0) time = 0;
 	    localforage.setItem('loopIn', time, function(err, val) {});
 	    self.loopIn = time;
 	    console.log('Loop In Set: ', time);
 	  };
 
 	  var _setLoopOut = function(time) {
+	    if (time > timeline.totalDuration()) time = timeline.totalDuration();
 	    localforage.setItem('loopOut', time, function(err, val) {});
 	    self.loopOut = time;
 	    console.log('Loop Out Set: ', time);
-	  };
-
-	  var _clearLoop = function(evt) {
-	    localforage.setItem('loopIn', null, function(err, val) {});
-	    localforage.setItem('loopOut', null, function(err, val) {});
-	    _setLoopDefaults();
 	  };
 
 	  var _setLoopDefaults = function(evt) {
