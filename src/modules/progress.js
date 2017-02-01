@@ -11,12 +11,16 @@ module.exports = function(timeline, options) {
     sliderSelector: '.js-anim-panel-slider',
     sliderTrackSelector: '.js-anim-panel-slider-track',
     sliderPlayheadSelector: '.js-anim-panel-slider-playhead',
+    sliderRangeSelector: '.js-slider-range',
+    showRangeActiveClass: 'is-active',
     sliderRangeStartSelector: '.js-anim-panel-slider-range-handle-start',
     sliderRangeEndSelector: '.js-anim-panel-slider-range-handle-end',
+    toggleRangeSelector: '.js-range-toggle',
     draggablePlayhead: null,
     isDragging: false,
     loopIn: null,
-    loopOut: null
+    loopOut: null,
+    isShowingRange: false
   };
  
  
@@ -28,6 +32,7 @@ module.exports = function(timeline, options) {
   var _init = function() {
     _createDraggables();
     _addEventListeners();
+    _setIsShowingRange();
     _setLoop();
   };
 
@@ -78,6 +83,15 @@ module.exports = function(timeline, options) {
     });
 
     document.querySelector(self.sliderTrackSelector).addEventListener('click', _trackClicked.bind(self));
+    document.querySelector(self.toggleRangeSelector).addEventListener('click', self.toggleRange);
+  };
+
+  var _setIsShowingRange = function() {
+    localforage.getItem('isShowingRange', function(err, val) {
+      if (val) {
+        self.toggleRange();
+      }
+    });
   };
 
   var _trackClicked = function(evt) {
@@ -201,6 +215,18 @@ module.exports = function(timeline, options) {
     self.draggablePlayhead.position.x = position;
     playheadEl.style.left = position + 'px';
   };
+
+  self.toggleRange = function() {
+    self.isShowingRange = !self.isShowingRange;
+    localforage.setItem('isShowingRange', self.isShowingRange, function(err, val) {});
+    if (self.isShowingRange) {
+      document.querySelector(self.sliderRangeSelector).classList.add(self.showRangeActiveClass);
+      document.querySelector(self.toggleRangeSelector).classList.add(self.showRangeActiveClass);
+    } else {
+      document.querySelector(self.sliderRangeSelector).classList.remove(self.showRangeActiveClass);
+      document.querySelector(self.toggleRangeSelector).classList.remove(self.showRangeActiveClass);
+    }
+  }
   
  
  

@@ -47,7 +47,11 @@
     }
 
     .anim-panel__slider-range {
+      display: none;
       
+      &.is-active {
+        display: block;
+      }
     }
 
     .anim-panel__slider-range-handle {

@@ -37,6 +37,13 @@
   background-image: url('data:image/svg+xml;utf8,<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"> <path fill="#fff" d="M20 20l-5-4-5 4V9h10z"/></svg>');
 }
 
+.anim-panel__button--range {
+  
+  &.is-active {
+    background-color: magenta;
+  }
+}
+
 //
 // Animations
 //
