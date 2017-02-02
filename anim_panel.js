@@ -226,7 +226,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (self.progress.isDragging) return;
 
 	        // If we're at the loop out point, jump to the loop in point
-	        if (timeline.totalTime() >= self.progress.loopOut && self.progress.isShowingRange) {
+	        var isOverRangeOut = timeline.totalTime() >= self.progress.loopOut && self.progress.isShowingRange;
+	        var isOverTimelineDuration = timeline.totalTime() >= timeline.totalDuration();
+	        if (isOverRangeOut || isOverTimelineDuration) {
 	          timeline.time(self.progress.loopIn);
 	        }
 
@@ -2826,7 +2828,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (val) {
 	        if (val < 0) val = 0;
 	        self.loopIn = val;
-	        timeline.time(self.loopIn);
+	        if (self.isShowingRange) timeline.time(self.loopIn);
 	        _setRangePositions();
 	      }
 	    });

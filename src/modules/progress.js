@@ -147,7 +147,7 @@ module.exports = function(timeline, options) {
       if (val) {
         if (val < 0) val = 0;
         self.loopIn = val;
-        timeline.time(self.loopIn);
+        if (self.isShowingRange) timeline.time(self.loopIn);
         _setRangePositions();
       }
     });
