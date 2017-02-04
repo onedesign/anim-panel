@@ -157,7 +157,7 @@ module.exports = function(timeline, options) {
           self.combokeys.bind(String(idx + 1), self.setTimescale.bind(self, self.timescales[idx]));
         }
 
-        // Changing Range
+        // Changing Range Start/End
         self.combokeys.bind('b', function() { 
           self.progress.setLoopIn(timeline.time());
           self.progress.updateStyles();

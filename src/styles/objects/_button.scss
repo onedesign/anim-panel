@@ -38,9 +38,10 @@
 }
 
 .anim-panel__button--range {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><path fill="#fff" d="M11 21h2V8h-2c-.6 0-1 .4-1 1v11c0 .5.4 1 1 1zM19 21h-2V8h2c.6 0 1 .4 1 1v11c0 .5-.5 1-1 1zM7 14h3v1H7zM20 14h3v1h-3z"/><path fill="none" d="M0 0h30v30H0z"/></svg>');
   
   &.is-active {
-    background-color: magenta;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><path fill="#{$color-range}" d="M11 21h2V8h-2c-.6 0-1 .4-1 1v11c0 .5.4 1 1 1zM19 21h-2V8h2c.6 0 1 .4 1 1v11c0 .5-.5 1-1 1zM7 14h3v1H7zM20 14h3v1h-3z"/><path fill="none" d="M0 0h30v30H0z"/></svg>');
   }
 }
 
