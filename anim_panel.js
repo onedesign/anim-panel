@@ -285,7 +285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      var _jump = function(direction, units) {
-	        var timeUnit = 0.25;
+	        var timeUnit = 0.1;
 	        var direction = (typeof direction === 'number' ? direction : 1);
 	        var timeToJump = (timeUnit * units) * direction;
 	        var newTime = timeline.time() + timeToJump;
