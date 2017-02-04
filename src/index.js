@@ -31,7 +31,8 @@ module.exports = function(timeline, options) {
         dropdownTriggerSelector: '.js-anim-panel-dropdown-trigger',
         dropdownOptionsSelector: '.js-anim-panel-dropdown-options',
         progress: null,
-        combokeys: new Combokeys(document.documentElement)
+        combokeys: new Combokeys(document.documentElement),
+        timescales: [1, 0.5, 0.25]
       };
      
      
@@ -150,6 +151,11 @@ module.exports = function(timeline, options) {
       var _bindShortcuts = function() {
         // Play/Pause
         self.combokeys.bind('space', self.togglePlay);
+
+        // Timescale
+        for (var idx = 0, length = self.timescales.length; idx < length; idx++) {
+          self.combokeys.bind(String(idx + 1), self.setTimescale.bind(self, self.timescales[idx]));
+        }
       };
 
       var _toggleDropdown = function(evt) {
@@ -212,12 +218,12 @@ module.exports = function(timeline, options) {
       self.play = function() {
         timeline.play();
         _updatePlayPauseState();
-      }
+      };
 
       self.pause = function() {
         timeline.pause();
         _updatePlayPauseState();
-      }
+      };
 
       self.togglePlay = function(evt) {
         if (timeline.paused()) {
@@ -233,6 +239,11 @@ module.exports = function(timeline, options) {
 
       self.gotoEnd = function(evt) {
         timeline.time(self.progress.isShowingRange ? self.progress.loopOut : timeline.totalDuration());
+      };
+
+      self.setTimescale = function(multiplier) {
+        var matchingEl = document.querySelectorAll(self.timescaleSelector + '[data-timescale="' + multiplier + '"]')[0];
+        matchingEl.click();
       };
      
      
