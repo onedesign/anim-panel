@@ -225,6 +225,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // Showing/Hiding Range
 	        self.combokeys.bind('shift+space', self.progress.toggleRange);
+
+	        // Jumping in time
+	        self.combokeys.bind('option+right', self.jumpForward.bind(self, 1));
+	        self.combokeys.bind('option+left', self.jumpBackward.bind(self, 1));
+	        self.combokeys.bind('shift+option+right', self.jumpForward.bind(self, 4));
+	        self.combokeys.bind('shift+option+left', self.jumpBackward.bind(self, 4));
 	      };
 
 	      var _toggleDropdown = function(evt) {
@@ -278,6 +284,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      };
 
+	      var _jump = function(direction, units) {
+	        var timeUnit = 0.25;
+	        var direction = (typeof direction === 'number' ? direction : 1);
+	        var timeToJump = (timeUnit * units) * direction;
+	        var newTime = timeline.time() + timeToJump;
+	        self.pause();
+	        if (newTime < 0) newTime = 0;
+	        if (newTime > timeline.totalDuration()) newTime = timeline.totalDuration();
+	        timeline.time(newTime);
+	      }
+
 
 	      //
 	      //   Public Methods
@@ -314,6 +331,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var matchingEl = document.querySelectorAll(self.timescaleSelector + '[data-timescale="' + multiplier + '"]')[0];
 	        matchingEl.click();
 	      };
+
+	      self.jumpForward = function(units) {
+	        _jump(1, units);
+	      }
+
+	      self.jumpBackward = function(units) {
+	        _jump(-1, units);
+	      }
 	     
 	     
 	      //
