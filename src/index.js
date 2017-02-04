@@ -156,6 +156,16 @@ module.exports = function(timeline, options) {
         for (var idx = 0, length = self.timescales.length; idx < length; idx++) {
           self.combokeys.bind(String(idx + 1), self.setTimescale.bind(self, self.timescales[idx]));
         }
+
+        // Changing Range
+        self.combokeys.bind('b', function() { 
+          self.progress.setLoopIn(timeline.time());
+          self.progress.updateStyles();
+        });
+        self.combokeys.bind('n', function() { 
+          self.progress.setLoopOut(timeline.time());
+          self.progress.updateStyles();
+        });
       };
 
       var _toggleDropdown = function(evt) {

@@ -56,13 +56,13 @@ module.exports = function(timeline, options) {
   };
  
   var _addEventListeners = function() {
-    self.draggablePlayhead.on('pointerDown', function(evt, poitner) {
+    self.draggablePlayhead.on('pointerDown', function(evt, pointer) {
       timeline.pause(); 
       _playPauseCallback();
       self.isDragging = true;
     });
 
-    self.draggablePlayhead.on('pointerUp', function(evt, poitner) {
+    self.draggablePlayhead.on('pointerUp', function(evt, pointer) {
       self.isDragging = false;
     });
 
@@ -71,14 +71,14 @@ module.exports = function(timeline, options) {
     });
 
     self.draggableStart.on('dragMove', function(evt, pointer, moveVector) {
-      _setLoopIn(_getTimeFromDraggablePosition(self.draggableStart));
+      self.setLoopIn(_getTimeFromDraggablePosition(self.draggableStart));
       timeline.pause();
       _playPauseCallback();
       timeline.seek(self.loopIn);
     });
 
     self.draggableEnd.on('dragMove', function(evt, pointer, moveVector) {
-      _setLoopOut(_getTimeFromDraggablePosition(self.draggableEnd));
+      self.setLoopOut(_getTimeFromDraggablePosition(self.draggableEnd));
       timeline.pause();
       _playPauseCallback();
       timeline.seek(self.loopOut);
@@ -150,7 +150,7 @@ module.exports = function(timeline, options) {
         if (val < 0) val = 0;
         self.loopIn = val;
         if (self.isShowingRange) timeline.time(self.loopIn);
-        _setRangePositions();
+        _updateRangePositions();
         _updateRangeSpans();
       }
     });
@@ -158,13 +158,13 @@ module.exports = function(timeline, options) {
       if (val) {
         if (val > timeline.totalDuration()) val = timeline.totalDuration();
         self.loopOut = val;
-        _setRangePositions();
+        _updateRangePositions();
         _updateRangeSpans();
       }
     });
   };
 
-  var _setRangePositions = function() {
+  var _updateRangePositions = function() {
     var startPosition = _getRangeHandlePositionFromTime(self.loopIn);
     var endPosition = _getRangeHandlePositionFromTime(self.loopOut);
     var rangeStartEl = document.querySelector(self.sliderRangeStartSelector);
@@ -175,22 +175,6 @@ module.exports = function(timeline, options) {
 
     self.draggableEnd.position.x = endPosition;
     rangeEndEl.style.left = endPosition + 'px';
-  };
-
-  var _setLoopIn = function(time) {
-    if (time < 0) time = 0;
-    localforage.setItem('loopIn', time, function(err, val) {});
-    self.loopIn = time;
-    _updateRangeSpans()
-    console.log('Loop In Set: ', time);
-  };
-
-  var _setLoopOut = function(time) {
-    if (time > timeline.totalDuration()) time = timeline.totalDuration();
-    localforage.setItem('loopOut', time, function(err, val) {});
-    self.loopOut = time;
-    _updateRangeSpans()
-    console.log('Loop Out Set: ', time);
   };
 
   var _setLoopDefaults = function(evt) {
@@ -206,13 +190,14 @@ module.exports = function(timeline, options) {
   };
 
   var _updateRangeSpans = function() {
+    var rangeHandleWidth = document.querySelector(self.sliderRangeEndSelector).offsetWidth;
     var maxWidth = document.querySelector(self.sliderTrackSelector).offsetWidth;
     var beforeDecimal = (self.loopIn) / timeline.totalDuration();
     var afterDecimal = 1 - ((self.loopOut) / timeline.totalDuration());
     var beforeWidth = beforeDecimal * maxWidth;
     var afterWidth = afterDecimal * maxWidth;
-    document.querySelector(self.rangeSpanBeforeSelector).style.width = beforeWidth + 'px';
-    document.querySelector(self.rangeSpanAfterSelector).style.width = afterWidth + 'px';
+    document.querySelector(self.rangeSpanBeforeSelector).style.width = beforeWidth - rangeHandleWidth + 'px';
+    document.querySelector(self.rangeSpanAfterSelector).style.width = afterWidth - rangeHandleWidth  + 'px';
   };
  
  
@@ -240,6 +225,28 @@ module.exports = function(timeline, options) {
       document.querySelector(self.sliderRangeSelector).classList.remove(self.showRangeActiveClass);
       document.querySelector(self.toggleRangeSelector).classList.remove(self.showRangeActiveClass);
     }
+    _updateRangeSpans();
+  }
+
+  self.setLoopIn = function(time) {
+    if (time < 0) time = 0;
+    localforage.setItem('loopIn', time, function(err, val) {});
+    self.loopIn = time;
+    _updateRangeSpans();
+    console.log('Loop In Set: ', time);
+  };
+
+  self.setLoopOut = function(time) {
+    if (time > timeline.totalDuration()) time = timeline.totalDuration();
+    localforage.setItem('loopOut', time, function(err, val) {});
+    self.loopOut = time;
+    _updateRangeSpans();
+    console.log('Loop Out Set: ', time);
+  };
+
+  self.updateStyles = function() {
+    _updateRangeSpans();
+    _updateRangePositions();
   }
   
  
