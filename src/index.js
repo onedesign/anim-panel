@@ -123,8 +123,8 @@ module.exports = function(timeline, options) {
      
       var _addEventListeners = function() {
         // Playback Controls
-        document.querySelector(self.playPauseSelector).addEventListener('click', _togglePlay.bind(self));
-        document.querySelector(self.restartSelector).addEventListener('click', _gotoStart.bind(self));
+        document.querySelector(self.playPauseSelector).addEventListener('click', self.togglePlay);
+        document.querySelector(self.restartSelector).addEventListener('click', self.gotoStart);
 
         // Dropdowns
         var dropdowns = document.querySelectorAll(self.dropdownTriggerSelector);
@@ -142,22 +142,6 @@ module.exports = function(timeline, options) {
 
         // Listen for the playhead to change
         timeline.eventCallback('onUpdate', _onTimelineUpdate.bind(self));
-      };
-
-      var _togglePlay = function(evt) {
-        if (timeline.paused()) {
-          self.play();
-        } else {
-          self.pause();
-        }
-      };
-
-      var _gotoStart = function(evt) {
-        timeline.time(self.progress.isShowingRange ? self.progress.loopIn : 0);
-      };
-
-      var _gotoEnd = function(evt) {
-        timeline.time(self.progress.isShowingRange ? self.progress.loopOut : timeline.totalDuration());
       };
 
       var _toggleDropdown = function(evt) {
@@ -226,6 +210,22 @@ module.exports = function(timeline, options) {
         timeline.pause();
         _updatePlayPauseState();
       }
+
+      self.togglePlay = function(evt) {
+        if (timeline.paused()) {
+          self.play();
+        } else {
+          self.pause();
+        }
+      };
+
+      self.gotoStart = function(evt) {
+        timeline.time(self.progress.isShowingRange ? self.progress.loopIn : 0);
+      };
+
+      self.gotoEnd = function(evt) {
+        timeline.time(self.progress.isShowingRange ? self.progress.loopOut : timeline.totalDuration());
+      };
      
      
       //
