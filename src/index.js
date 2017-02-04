@@ -166,6 +166,9 @@ module.exports = function(timeline, options) {
           self.progress.setLoopOut(timeline.time());
           self.progress.updateStyles();
         });
+
+        // Showing/Hiding Range
+        self.combokeys.bind('shift+space', self.progress.toggleRange);
       };
 
       var _toggleDropdown = function(evt) {
