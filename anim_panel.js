@@ -105,7 +105,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	     
 	      self.settings = mergeOpts({
-	        consoleTime: false
+	        
 	      }, options);
 	     
 	     
@@ -225,6 +225,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // Showing/Hiding Range
 	        self.combokeys.bind('shift+space', self.progress.toggleRange);
+
+	        // Clearing Range
+	        self.combokeys.bind('shift+x', function() {
+	          self.progress.clearRange();
+	          self.progress.updateStyles();
+	        });
 
 	        // Jumping in time
 	        self.combokeys.bind(['option+right', 'pagedown'], self.jumpForward.bind(self, 1));
@@ -2935,10 +2941,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var maxWidth = document.querySelector(self.sliderTrackSelector).offsetWidth;
 	    var beforeDecimal = (self.loopIn) / timeline.totalDuration();
 	    var afterDecimal = 1 - ((self.loopOut) / timeline.totalDuration());
-	    var beforeWidth = beforeDecimal * maxWidth;
-	    var afterWidth = afterDecimal * maxWidth;
-	    document.querySelector(self.rangeSpanBeforeSelector).style.width = beforeWidth - rangeHandleWidth + 'px';
-	    document.querySelector(self.rangeSpanAfterSelector).style.width = afterWidth - rangeHandleWidth  + 'px';
+	    var beforeWidth = (beforeDecimal * maxWidth) - rangeHandleWidth;
+	    var afterWidth = (afterDecimal * maxWidth) - rangeHandleWidth;
+	    if (beforeWidth < 0) beforeWidth = 0;
+	    if (afterWidth < 0) afterWidth = 0;
+	    document.querySelector(self.rangeSpanBeforeSelector).style.width = beforeWidth + (beforeWidth > 0 ? 'px' : '');
+	    document.querySelector(self.rangeSpanAfterSelector).style.width = afterWidth + (beforeWidth > 0 ? 'px' : '');
 	  };
 	 
 	 
@@ -2988,6 +2996,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  self.updateStyles = function() {
 	    _updateRangeSpans();
 	    _updateRangePositions();
+	  }
+
+	  self.clearRange = function() {
+	    self.setLoopIn(0);
+	    self.setLoopOut(timeline.totalDuration());
 	  }
 	  
 	 

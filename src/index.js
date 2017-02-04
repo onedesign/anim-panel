@@ -49,7 +49,7 @@ module.exports = function(timeline, options) {
       }
      
       self.settings = mergeOpts({
-        consoleTime: false
+        
       }, options);
      
      
@@ -169,6 +169,12 @@ module.exports = function(timeline, options) {
 
         // Showing/Hiding Range
         self.combokeys.bind('shift+space', self.progress.toggleRange);
+
+        // Clearing Range
+        self.combokeys.bind('shift+x', function() {
+          self.progress.clearRange();
+          self.progress.updateStyles();
+        });
 
         // Jumping in time
         self.combokeys.bind(['option+right', 'pagedown'], self.jumpForward.bind(self, 1));
