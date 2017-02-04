@@ -248,7 +248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // If we're at the loop out point, jump to the loop in point
 	        var isOverRangeOut = timeline.totalTime() >= self.progress.loopOut && self.progress.isShowingRange;
 	        var isOverTimelineDuration = timeline.totalTime() >= timeline.totalDuration();
-	        if (isOverRangeOut || isOverTimelineDuration) {
+	        if (!timeline.paused() && isOverRangeOut || isOverTimelineDuration) {
 	          timeline.time(self.progress.isShowingRange ? self.progress.loopIn : 0);
 	        }
 
