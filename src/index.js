@@ -2,6 +2,7 @@ var styles = require('css!sass!postcss!./styles/main.scss');
 var markup = require("html!./index.html");
 var localforage = require('localforage');
 var Progress = require('./modules/progress');
+var Combokeys = require("combokeys");
 
 module.exports = function(timeline, options) {
       /*
@@ -29,7 +30,8 @@ module.exports = function(timeline, options) {
         dropdownSelector: '.js-anim-panel-dropdown',
         dropdownTriggerSelector: '.js-anim-panel-dropdown-trigger',
         dropdownOptionsSelector: '.js-anim-panel-dropdown-options',
-        progress: null
+        progress: null,
+        combokeys: new Combokeys(document.documentElement)
       };
      
      
@@ -62,6 +64,7 @@ module.exports = function(timeline, options) {
         _addLabelButtons();
         _addEventListeners();
         _updatePlayPauseState();
+        _bindShortcuts();
       };
 
       var _appendPanel = function() {
@@ -142,6 +145,11 @@ module.exports = function(timeline, options) {
 
         // Listen for the playhead to change
         timeline.eventCallback('onUpdate', _onTimelineUpdate.bind(self));
+      };
+
+      var _bindShortcuts = function() {
+        // Play/Pause
+        self.combokeys.bind('space', self.togglePlay);
       };
 
       var _toggleDropdown = function(evt) {
