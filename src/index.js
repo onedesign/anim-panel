@@ -187,7 +187,7 @@ module.exports = function(timeline, options) {
         var isOverRangeOut = timeline.totalTime() >= self.progress.loopOut && self.progress.isShowingRange;
         var isOverTimelineDuration = timeline.totalTime() >= timeline.totalDuration();
         if (isOverRangeOut || isOverTimelineDuration) {
-          timeline.time(self.progress.loopIn);
+          timeline.time(self.progress.isShowingRange ? self.progress.loopIn : 0);
         }
 
         // Update slider based on timeline
