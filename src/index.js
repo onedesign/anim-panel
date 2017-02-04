@@ -124,7 +124,7 @@ module.exports = function(timeline, options) {
       var _addEventListeners = function() {
         // Playback Controls
         document.querySelector(self.playPauseSelector).addEventListener('click', _togglePlay.bind(self));
-        document.querySelector(self.restartSelector).addEventListener('click', _restart.bind(self));
+        document.querySelector(self.restartSelector).addEventListener('click', _gotoStart.bind(self));
 
         // Dropdowns
         var dropdowns = document.querySelectorAll(self.dropdownTriggerSelector);
@@ -152,9 +152,12 @@ module.exports = function(timeline, options) {
         }
       };
 
-      var _restart = function(evt) {
-        timeline.timeScale(1);
-        timeline.time(self.progress.loopIn);
+      var _gotoStart = function(evt) {
+        timeline.time(self.progress.isShowingRange ? self.progress.loopIn : 0);
+      };
+
+      var _gotoEnd = function(evt) {
+        timeline.time(self.progress.isShowingRange ? self.progress.loopOut : timeline.totalDuration());
       };
 
       var _toggleDropdown = function(evt) {

@@ -180,7 +180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _addEventListeners = function() {
 	        // Playback Controls
 	        document.querySelector(self.playPauseSelector).addEventListener('click', _togglePlay.bind(self));
-	        document.querySelector(self.restartSelector).addEventListener('click', _restart.bind(self));
+	        document.querySelector(self.restartSelector).addEventListener('click', _gotoStart.bind(self));
 
 	        // Dropdowns
 	        var dropdowns = document.querySelectorAll(self.dropdownTriggerSelector);
@@ -208,9 +208,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      };
 
-	      var _restart = function(evt) {
-	        timeline.timeScale(1);
-	        timeline.time(self.progress.loopIn);
+	      var _gotoStart = function(evt) {
+	        timeline.time(self.progress.isShowingRange ? self.progress.loopIn : 0);
+	      };
+
+	      var _gotoEnd = function(evt) {
+	        timeline.time(self.progress.isShowingRange ? self.progress.loopOut : timeline.totalDuration());
 	      };
 
 	      var _toggleDropdown = function(evt) {
@@ -374,9 +377,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var require;var require;/* WEBPACK VAR INJECTION */(function(global) {/*!
 	    localForage -- Offline Storage, Improved
-	    Version 1.4.3
+	    Version 1.4.2
 	    https://mozilla.github.io/localForage
-	    (c) 2013-2016 Mozilla, Apache License 2.0
+	    (c) 2013-2015 Mozilla, Apache License 2.0
 	*/
 	(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.localforage = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw (f.code="MODULE_NOT_FOUND", f)}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 	'use strict';
@@ -717,29 +720,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	},{"1":1}],4:[function(_dereq_,module,exports){
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function getIDB() {
 	    /* global indexedDB,webkitIndexedDB,mozIndexedDB,OIndexedDB,msIndexedDB */
-	    try {
-	        if (typeof indexedDB !== 'undefined') {
-	            return indexedDB;
-	        }
-	        if (typeof webkitIndexedDB !== 'undefined') {
-	            return webkitIndexedDB;
-	        }
-	        if (typeof mozIndexedDB !== 'undefined') {
-	            return mozIndexedDB;
-	        }
-	        if (typeof OIndexedDB !== 'undefined') {
-	            return OIndexedDB;
-	        }
-	        if (typeof msIndexedDB !== 'undefined') {
-	            return msIndexedDB;
-	        }
-	    } catch (e) {}
+	    if (typeof indexedDB !== 'undefined') {
+	        return indexedDB;
+	    }
+	    if (typeof webkitIndexedDB !== 'undefined') {
+	        return webkitIndexedDB;
+	    }
+	    if (typeof mozIndexedDB !== 'undefined') {
+	        return mozIndexedDB;
+	    }
+	    if (typeof OIndexedDB !== 'undefined') {
+	        return OIndexedDB;
+	    }
+	    if (typeof msIndexedDB !== 'undefined') {
+	        return msIndexedDB;
+	    }
 	}
 
 	var idb = getIDB();
@@ -829,23 +830,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}
 
-	function executeTwoCallbacks(promise, callback, errorCallback) {
-	    if (typeof callback === 'function') {
-	        promise.then(callback);
-	    }
-
-	    if (typeof errorCallback === 'function') {
-	        promise["catch"](errorCallback);
-	    }
-	}
-
 	// Some code originally from async_storage.js in
 	// [Gaia](https://github.com/mozilla-b2g/gaia).
 
 	var DETECT_BLOB_SUPPORT_STORE = 'local-forage-detect-blob-support';
 	var supportsBlobs;
 	var dbContexts;
-	var toString = Object.prototype.toString;
 
 	// Transform a binary string to an array buffer, because otherwise
 	// weird stuff happens when you try to work with the binary string directly.
@@ -1085,7 +1075,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    });
 
-	    executeTwoCallbacks(promise, callback, callback);
+	    promise.then(callback, callback);
 	    return promise;
 	}
 
@@ -1276,7 +1266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var dbInfo;
 	        self.ready().then(function () {
 	            dbInfo = self._dbInfo;
-	            if (toString.call(value) === '[object Blob]') {
+	            if (value instanceof Blob) {
 	                return _checkBlobSupport(dbInfo.db).then(function (blobSupport) {
 	                    if (blobSupport) {
 	                        return value;
@@ -1536,8 +1526,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var TYPE_FLOAT64ARRAY = 'fl64';
 	var TYPE_SERIALIZED_MARKER_LENGTH = SERIALIZED_MARKER_LENGTH + TYPE_ARRAYBUFFER.length;
 
-	var toString$1 = Object.prototype.toString;
-
 	function stringToBuffer(serializedString) {
 	    // Fill the string into a ArrayBuffer.
 	    var bufferLength = serializedString.length * 0.75;
@@ -1599,16 +1587,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	// instructs the `setItem()` callback/promise to be executed). This is how
 	// we store binary data with localStorage.
 	function serialize(value, callback) {
-	    var valueType = '';
+	    var valueString = '';
 	    if (value) {
-	        valueType = toString$1.call(value);
+	        valueString = value.toString();
 	    }
 
 	    // Cannot use `value instanceof ArrayBuffer` or such here, as these
 	    // checks fail when running the tests using casper.js...
 	    //
 	    // TODO: See why those tests fail and use a better solution.
-	    if (value && (valueType === '[object ArrayBuffer]' || value.buffer && toString$1.call(value.buffer) === '[object ArrayBuffer]')) {
+	    if (value && (value.toString() === '[object ArrayBuffer]' || value.buffer && value.buffer.toString() === '[object ArrayBuffer]')) {
 	        // Convert binary arrays to a string and prefix the string with
 	        // a special marker.
 	        var buffer;
@@ -1620,23 +1608,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            buffer = value.buffer;
 
-	            if (valueType === '[object Int8Array]') {
+	            if (valueString === '[object Int8Array]') {
 	                marker += TYPE_INT8ARRAY;
-	            } else if (valueType === '[object Uint8Array]') {
+	            } else if (valueString === '[object Uint8Array]') {
 	                marker += TYPE_UINT8ARRAY;
-	            } else if (valueType === '[object Uint8ClampedArray]') {
+	            } else if (valueString === '[object Uint8ClampedArray]') {
 	                marker += TYPE_UINT8CLAMPEDARRAY;
-	            } else if (valueType === '[object Int16Array]') {
+	            } else if (valueString === '[object Int16Array]') {
 	                marker += TYPE_INT16ARRAY;
-	            } else if (valueType === '[object Uint16Array]') {
+	            } else if (valueString === '[object Uint16Array]') {
 	                marker += TYPE_UINT16ARRAY;
-	            } else if (valueType === '[object Int32Array]') {
+	            } else if (valueString === '[object Int32Array]') {
 	                marker += TYPE_INT32ARRAY;
-	            } else if (valueType === '[object Uint32Array]') {
+	            } else if (valueString === '[object Uint32Array]') {
 	                marker += TYPE_UINT32ARRAY;
-	            } else if (valueType === '[object Float32Array]') {
+	            } else if (valueString === '[object Float32Array]') {
 	                marker += TYPE_FLOAT32ARRAY;
-	            } else if (valueType === '[object Float64Array]') {
+	            } else if (valueString === '[object Float64Array]') {
 	                marker += TYPE_FLOAT64ARRAY;
 	            } else {
 	                callback(new Error('Failed to get type for BinaryArray'));
@@ -1644,7 +1632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        callback(marker + bufferToString(buffer));
-	    } else if (valueType === '[object Blob]') {
+	    } else if (valueString === '[object Blob]') {
 	        // Conver the blob to a binaryArray and then to a string.
 	        var fileReader = new FileReader();
 
@@ -2314,6 +2302,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: key$2,
 	    keys: keys$2
 	};
+
+	function executeTwoCallbacks(promise, callback, errorCallback) {
+	    if (typeof callback === 'function') {
+	        promise.then(callback);
+	    }
+
+	    if (typeof errorCallback === 'function') {
+	        promise["catch"](errorCallback);
+	    }
+	}
 
 	// Custom drivers are stored here when `defineDriver()` is called.
 	// They are shared across all instances of localForage.
