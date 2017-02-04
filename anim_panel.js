@@ -229,8 +229,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Jumping in time
 	        self.combokeys.bind('option+right', self.jumpForward.bind(self, 1));
 	        self.combokeys.bind('option+left', self.jumpBackward.bind(self, 1));
-	        self.combokeys.bind('shift+option+right', self.jumpForward.bind(self, 4));
-	        self.combokeys.bind('shift+option+left', self.jumpBackward.bind(self, 4));
+	        self.combokeys.bind('shift+option+right', self.jumpForward.bind(self, 10));
+	        self.combokeys.bind('shift+option+left', self.jumpBackward.bind(self, 10));
 	      };
 
 	      var _toggleDropdown = function(evt) {
