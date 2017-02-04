@@ -15,6 +15,8 @@ module.exports = function(timeline, options) {
     showRangeActiveClass: 'is-active',
     sliderRangeStartSelector: '.js-anim-panel-slider-range-handle-start',
     sliderRangeEndSelector: '.js-anim-panel-slider-range-handle-end',
+    rangeSpanBeforeSelector: '.js-anim-panel-slider-range-before',
+    rangeSpanAfterSelector: '.js-anim-panel-slider-range-after',
     toggleRangeSelector: '.js-range-toggle',
     draggablePlayhead: null,
     isDragging: false,
@@ -149,6 +151,7 @@ module.exports = function(timeline, options) {
         self.loopIn = val;
         if (self.isShowingRange) timeline.time(self.loopIn);
         _setRangePositions();
+        _updateRangeSpans();
       }
     });
     localforage.getItem('loopOut', function(err, val) {
@@ -156,6 +159,7 @@ module.exports = function(timeline, options) {
         if (val > timeline.totalDuration()) val = timeline.totalDuration();
         self.loopOut = val;
         _setRangePositions();
+        _updateRangeSpans();
       }
     });
   };
@@ -177,6 +181,7 @@ module.exports = function(timeline, options) {
     if (time < 0) time = 0;
     localforage.setItem('loopIn', time, function(err, val) {});
     self.loopIn = time;
+    _updateRangeSpans()
     console.log('Loop In Set: ', time);
   };
 
@@ -184,6 +189,7 @@ module.exports = function(timeline, options) {
     if (time > timeline.totalDuration()) time = timeline.totalDuration();
     localforage.setItem('loopOut', time, function(err, val) {});
     self.loopOut = time;
+    _updateRangeSpans()
     console.log('Loop Out Set: ', time);
   };
 
@@ -197,6 +203,16 @@ module.exports = function(timeline, options) {
     var timePercentage = time / timeline.totalDuration();
     var position = timePercentage * _getMaxRangePosition();
     return position;
+  };
+
+  var _updateRangeSpans = function() {
+    var maxWidth = document.querySelector(self.sliderTrackSelector).offsetWidth;
+    var beforeDecimal = (self.loopIn) / timeline.totalDuration();
+    var afterDecimal = 1 - ((self.loopOut) / timeline.totalDuration());
+    var beforeWidth = beforeDecimal * maxWidth;
+    var afterWidth = afterDecimal * maxWidth;
+    document.querySelector(self.rangeSpanBeforeSelector).style.width = beforeWidth + 'px';
+    document.querySelector(self.rangeSpanAfterSelector).style.width = afterWidth + 'px';
   };
  
  

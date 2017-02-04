@@ -2,31 +2,35 @@
 // Slider
 //---------------------------------------------------------------
 
+$slider-track-height: 42px;
+$slider-bar-height: 6px;
+$slider-track-margins: 18px;
+
 .anim-panel__slider {
 
 }
 
   .anim-panel__slider-track {
     width: 100%;
-    height: 42px;
+    height: $slider-track-height;
     position: relative;
 
     &:before {
       content: "";
       display: block;
       position: absolute;
-      height: 6px;
-      left: 18px;
-      right: 18px;
-      top: 18px;
+      height: $slider-bar-height;
+      left: $slider-track-margins;
+      right: $slider-track-margins;
+      top: $slider-track-margins;
       background-color: rgba(#fff, 0.3);
       border-radius: 3px;
     }
   }
 
     .anim-panel__slider-playhead {
-      width: 42px;
-      height: 42px;
+      width: $slider-track-height;
+      height: $slider-track-height;
       display: block;
       position: relative;
       cursor: pointer;
@@ -34,28 +38,28 @@
       &:before {
         content: "";
         display: block;
-        width: 6px;
-        height: 6px;
+        width: $slider-bar-height;
+        height: $slider-bar-height;
         border-radius: 3px;
         background-color: #fff;
         transform-origin: 50% 50%;
         position: absolute;
-        left: 18px;
-        top: 18px;
+        left: $slider-track-margins;
+        top: $slider-track-margins;
         transition: transform 0.2s;
       }
     }
 
     .anim-panel__slider-range {
       display: none;
-      
+
       &.is-active {
         display: block;
       }
     }
 
     .anim-panel__slider-range-handle {
-      width: 26px;
+      width: $slider-bar-height;
       height: 24px;
       display: block;
       position: absolute;
@@ -66,7 +70,7 @@
         content: "";
         display: block;
         position: absolute;
-        width: 6px;
+        width: $slider-bar-height;
         height: 24px;
         background-color: $color-range;
       }
@@ -86,8 +90,24 @@
         &:after {
           right: 10px;
           border-top-right-radius: 4px;
-          border-bottom-right-radius: 2px;
+          border-bottom-right-radius: 4px;
         }
+      }
+    }
+
+    .anim-panel__slider-range-span {
+      display: block;
+      background-color: $color-range;
+      height: $slider-bar-height;
+      pointer-events: none;
+      position: absolute;
+      top: 18px;
+      left: $slider-track-margins;
+      border-radius: $slider-bar-height / 2;
+
+      & + & {
+        left: auto;
+        right: $slider-track-margins;
       }
     }
 
