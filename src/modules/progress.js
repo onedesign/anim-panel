@@ -112,7 +112,7 @@ module.exports = function(timeline, options) {
   };
 
   var _setIsShowingRange = function() {
-    if (localStorage.getItem('isShowingRange')) {
+    if (localStorage.getItem('isShowingRange') == 'true') {
       self.toggleRange();
     }
   };
@@ -165,12 +165,12 @@ module.exports = function(timeline, options) {
     _setLoopDefaults();
 
     // Check for local storage values
-    var loopIn = localStorage.getItem('loopIn');
+    var loopIn = Number(localStorage.getItem('loopIn'));
     if (loopIn < 0) loopIn = 0;
     self.loopIn = loopIn;
     if (self.isShowingRange) timeline.time(self.loopIn);
 
-    var loopOut = localStorage.getItem('loopOut');
+    var loopOut = Number(localStorage.getItem('loopOut'));
     if (loopOut > timeline.totalDuration()) loopOut = timeline.totalDuration();
     self.loopOut = loopOut;
 
@@ -217,7 +217,7 @@ module.exports = function(timeline, options) {
     if (afterWidth < 0) afterWidth = 0;
 
     self.rangeSpanBeforeEl.style.width = beforeWidth + (beforeWidth > 0 ? 'px' : '');
-    self.rangeSpanAfterEl.style.width = afterWidth + (beforeWidth > 0 ? 'px' : '');
+    self.rangeSpanAfterEl.style.width = afterWidth + (afterWidth > 0 ? 'px' : '');
   };
  
  
@@ -249,6 +249,7 @@ module.exports = function(timeline, options) {
   }
 
   self.setLoopIn = function(time) {
+    if (time >= self.loopOut) time = self.loopOut - 0.1;
     if (time < 0) time = 0;
     localStorage.setItem('loopIn', time);
     self.loopIn = time;
@@ -257,6 +258,7 @@ module.exports = function(timeline, options) {
   };
 
   self.setLoopOut = function(time) {
+    if (time <= self.loopIn) time = self.loopIn + 0.1;
     if (time > timeline.totalDuration()) time = timeline.totalDuration();
     localStorage.setItem('loopOut', time);
     self.loopOut = time;
@@ -274,6 +276,17 @@ module.exports = function(timeline, options) {
     self.setLoopOut(timeline.totalDuration());
   }
   
+  self.expandRange = function() {
+    self.setLoopIn(self.loopIn - 0.1);
+    self.setLoopOut(self.loopOut + 0.1);
+    self.updateStyles();
+  }
+  
+  self.contractRange = function() {
+    self.setLoopIn(self.loopIn + 0.1);
+    self.setLoopOut(self.loopOut - 0.1);
+    self.updateStyles();
+  }
  
  
   //

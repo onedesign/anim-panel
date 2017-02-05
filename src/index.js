@@ -190,7 +190,6 @@ module.exports = function(timeline, options) {
         // Expanding the range on either side
         self.combokeys.bind(['option+up'], self.progress.expandRange);
         self.combokeys.bind(['option+down'], self.progress.contractRange);
-        
 
         // Jumping in time
         self.combokeys.bind(self.settings.shortcuts.jumpForward, self.jumpForward.bind(self, 1));
