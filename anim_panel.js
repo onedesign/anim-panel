@@ -232,6 +232,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	          self.progress.updateStyles();
 	        });
 
+	        // Expanding the range on either side
+	        self.combokeys.bind(['option+up'], self.progress.expandRange);
+	        self.combokeys.bind(['option+down'], self.progress.contractRange);
+	        
+
 	        // Jumping in time
 	        self.combokeys.bind(['option+right', 'pagedown'], self.jumpForward.bind(self, 1));
 	        self.combokeys.bind(['option+left', 'pageup'], self.jumpBackward.bind(self, 1));
@@ -367,7 +372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  left: 0;\n  right: 0;\n  width: 100%;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 11px;\n  display: flex;\n  justify-content: space-between;\n  background-color: rgba(0, 0, 0, 0.9); }\n  .anim-panel > .js-slider {\n    margin-top: 8px; }\n\n.anim-panel__control-set {\n  display: flex; }\n\n.anim-panel__timescale-set {\n  display: flex; }\n\n.anim-panel__loop-set {\n  display: flex; }\n\n.anim-panel__slider-set {\n  flex: 1; }\n\n.anim-panel__button {\n  width: 43px;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n  text-indent: -9999px; }\n  .anim-panel__button:hover {\n    background-color: rgba(255, 255, 255, 0.05); }\n\n.anim-panel__button--play-pause {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>play</title><polygon points=\"20.657 14.5 11 20.157 11 8.843 20.657 14.5\" style=\"fill:#fff\"/></svg>'); }\n  .anim-panel__button--play-pause.is-playing {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>pause</title><rect x=\"10\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/><rect x=\"18\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--restart {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--labels {\n  background-image: url('data:image/svg+xml;utf8,<svg id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"> <path fill=\"#fff\" d=\"M20 20l-5-4-5 4V9h10z\"/></svg>'); }\n\n.anim-panel__button--range {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><path fill=\"#fff\" d=\"M11 21h2V8h-2c-.6 0-1 .4-1 1v11c0 .5.4 1 1 1zM19 21h-2V8h2c.6 0 1 .4 1 1v11c0 .5-.5 1-1 1zM7 14h3v1H7zM20 14h3v1h-3z\"/><path fill=\"none\" d=\"M0 0h30v30H0z\"/></svg>'); }\n  .anim-panel__button--range.is-active {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><path fill=\"#0085a1\" d=\"M11 21h2V8h-2c-.6 0-1 .4-1 1v11c0 .5.4 1 1 1zM19 21h-2V8h2c.6 0 1 .4 1 1v11c0 .5-.5 1-1 1zM7 14h3v1H7zM20 14h3v1h-3z\"/><path fill=\"none\" d=\"M0 0h30v30H0z\"/></svg>'); }\n\n@keyframes active-control {\n  0%, 100% {\n    opacity: 1; }\n  50% {\n    opacity: 0.3; } }\n\n.anim-panel__timescale-button {\n  margin: 0;\n  padding: 15px 12px;\n  text-align: center;\n  cursor: pointer;\n  color: #666; }\n  .anim-panel__timescale-button:hover {\n    color: #aaa; }\n  .anim-panel__timescale-button.is-active {\n    color: #fff; }\n\n.anim-panel__dropdown {\n  position: relative; }\n\n.anim-panel__dropdown-options {\n  position: absolute;\n  background-color: red;\n  display: none; }\n  .anim-panel__dropdown-options > p {\n    margin: 0;\n    padding: 11px 14px;\n    color: #fff;\n    background-color: #555;\n    cursor: pointer; }\n  .anim-panel__dropdown-options > p:hover {\n    background-color: #444; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-labels-button {\n  background-color: #333; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-options {\n  display: block; }\n\n.anim-panel__time {\n  width: 60px;\n  margin: 0; }\n  .anim-panel__time > p {\n    margin: 0;\n    margin-top: 14px;\n    margin-left: 17px;\n    color: #fff; }\n\n.anim-panel__slider-track {\n  width: 100%;\n  height: 42px;\n  position: relative; }\n  .anim-panel__slider-track:before {\n    content: \"\";\n    display: block;\n    position: absolute;\n    height: 6px;\n    left: 18px;\n    right: 18px;\n    top: 18px;\n    background-color: rgba(255, 255, 255, 0.3);\n    border-radius: 3px; }\n\n.anim-panel__slider-playhead {\n  width: 42px;\n  height: 42px;\n  display: block;\n  position: relative;\n  cursor: pointer; }\n  .anim-panel__slider-playhead:before {\n    content: \"\";\n    display: block;\n    width: 6px;\n    height: 6px;\n    border-radius: 3px;\n    background-color: #fff;\n    transform-origin: 50% 50%;\n    position: absolute;\n    left: 18px;\n    top: 18px;\n    transition: transform 0.2s; }\n\n.anim-panel__slider-range {\n  display: none; }\n  .anim-panel__slider-range.is-active {\n    display: block; }\n\n.anim-panel__slider-range-handle {\n  width: 6px;\n  height: 24px;\n  display: block;\n  position: absolute;\n  top: 9px;\n  cursor: pointer; }\n  .anim-panel__slider-range-handle:after {\n    content: \"\";\n    display: block;\n    position: absolute;\n    width: 6px;\n    height: 24px;\n    background-color: #0085a1; }\n  .anim-panel__slider-range-handle:before {\n    content: \"\";\n    display: block;\n    position: absolute;\n    width: 16px;\n    height: 24px;\n    background-color: transparent; }\n  .anim-panel__slider-range-handle:nth-child(1):after {\n    left: 10px;\n    border-top-left-radius: 3px;\n    border-bottom-left-radius: 3px; }\n  .anim-panel__slider-range-handle:nth-child(2) {\n    right: 0; }\n    .anim-panel__slider-range-handle:nth-child(2):after {\n      right: 10px;\n      border-top-right-radius: 3px;\n      border-bottom-right-radius: 3px; }\n    .anim-panel__slider-range-handle:nth-child(2):before {\n      right: 0; }\n\n.anim-panel__slider-range-span {\n  display: block;\n  background-color: #0085a1;\n  height: 6px;\n  pointer-events: none;\n  position: absolute;\n  top: 18px;\n  left: 18px;\n  border-radius: 3px; }\n  .anim-panel__slider-range-span + .anim-panel__slider-range-span {\n    left: auto;\n    right: 18px; }\n\n.anim-panel__slider:hover .anim-panel__slider-playhead:before {\n  transform: scale(2.5); }\n", ""]);
+	exports.push([module.id, ".anim-panel {\n  position: fixed;\n  top: -1px;\n  left: 0;\n  right: 0;\n  width: 100%;\n  font-family: \"Menlo\", \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", Geneva, Verdana, sans-serif;\n  font-size: 11px;\n  display: flex;\n  justify-content: space-between;\n  background-color: rgba(0, 0, 0, 0.9); }\n  .anim-panel > .js-slider {\n    margin-top: 8px; }\n\n.anim-panel__control-set {\n  display: flex; }\n\n.anim-panel__timescale-set {\n  display: flex; }\n\n.anim-panel__loop-set {\n  display: flex; }\n\n.anim-panel__slider-set {\n  flex: 1; }\n\n.anim-panel__button {\n  width: 43px;\n  padding: 15px 0;\n  text-align: center;\n  cursor: pointer;\n  margin: 0;\n  background-position: center center;\n  background-repeat: no-repeat;\n  text-indent: -9999px; }\n  .anim-panel__button:hover {\n    background-color: rgba(255, 255, 255, 0.05); }\n\n.anim-panel__button--play-pause {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>play</title><polygon points=\"20.657 14.5 11 20.157 11 8.843 20.657 14.5\" style=\"fill:#fff\"/></svg>'); }\n  .anim-panel__button--play-pause.is-playing {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>pause</title><rect x=\"10\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/><rect x=\"18\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--restart {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><title>restart</title><polygon points=\"10.343 14.5 20 20.157 20 8.843 10.343 14.5\" style=\"fill:#fff\"/><rect x=\"8\" y=\"9\" width=\"2\" height=\"11\" style=\"fill:#fff\"/></svg>'); }\n\n.anim-panel__button--labels {\n  background-image: url('data:image/svg+xml;utf8,<svg id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"> <path fill=\"#fff\" d=\"M20 20l-5-4-5 4V9h10z\"/></svg>'); }\n\n.anim-panel__button--range {\n  background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><path fill=\"#fff\" d=\"M11 21h2V8h-2c-.6 0-1 .4-1 1v11c0 .5.4 1 1 1zM19 21h-2V8h2c.6 0 1 .4 1 1v11c0 .5-.5 1-1 1zM7 14h3v1H7zM20 14h3v1h-3z\"/><path fill=\"none\" d=\"M0 0h30v30H0z\"/></svg>'); }\n  .anim-panel__button--range.is-active {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><path fill=\"#0085a1\" d=\"M11 21h2V8h-2c-.6 0-1 .4-1 1v11c0 .5.4 1 1 1zM19 21h-2V8h2c.6 0 1 .4 1 1v11c0 .5-.5 1-1 1zM7 14h3v1H7zM20 14h3v1h-3z\"/><path fill=\"none\" d=\"M0 0h30v30H0z\"/></svg>'); }\n\n@keyframes active-control {\n  0%, 100% {\n    opacity: 1; }\n  50% {\n    opacity: 0.3; } }\n\n.anim-panel__timescale-button {\n  margin: 0;\n  padding: 15px 12px;\n  text-align: center;\n  cursor: pointer;\n  color: #666; }\n  .anim-panel__timescale-button:hover {\n    color: #aaa; }\n  .anim-panel__timescale-button.is-active {\n    color: #fff; }\n\n.anim-panel__dropdown {\n  position: relative; }\n\n.anim-panel__dropdown-options {\n  position: absolute;\n  background-color: red;\n  display: none; }\n  .anim-panel__dropdown-options > p {\n    margin: 0;\n    padding: 11px 14px;\n    color: #fff;\n    background-color: #555;\n    cursor: pointer; }\n  .anim-panel__dropdown-options > p:hover {\n    background-color: #444; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-labels-button {\n  background-color: #333; }\n\n.anim-panel__dropdown.is-active .anim-panel__dropdown-options {\n  display: block; }\n\n.anim-panel__time {\n  width: 60px;\n  margin: 0; }\n  .anim-panel__time > p {\n    margin: 0;\n    margin-top: 14px;\n    margin-left: 17px;\n    color: #fff; }\n\n.anim-panel__slider-track {\n  width: 100%;\n  height: 42px;\n  position: relative; }\n  .anim-panel__slider-track:before {\n    content: \"\";\n    display: block;\n    position: absolute;\n    height: 6px;\n    left: 18px;\n    right: 18px;\n    top: 18px;\n    background-color: rgba(255, 255, 255, 0.3);\n    border-radius: 3px; }\n\n.anim-panel__slider-playhead {\n  width: 42px;\n  height: 42px;\n  display: block;\n  position: relative;\n  cursor: pointer; }\n  .anim-panel__slider-playhead:before {\n    content: \"\";\n    display: block;\n    width: 6px;\n    height: 6px;\n    border-radius: 3px;\n    background-color: #fff;\n    transform-origin: 50% 50%;\n    position: absolute;\n    left: 18px;\n    top: 18px;\n    transition: transform 0.2s; }\n\n.anim-panel__slider-range {\n  display: none; }\n  .anim-panel__slider-range.is-active {\n    display: block; }\n\n.anim-panel__slider-range-handle {\n  width: 28px;\n  height: 24px;\n  display: block;\n  position: absolute;\n  top: 9px;\n  cursor: pointer; }\n  .anim-panel__slider-range-handle:after {\n    content: \"\";\n    display: block;\n    position: absolute;\n    width: 6px;\n    height: 24px;\n    background-color: #0085a1;\n    left: 11px; }\n  .anim-panel__slider-range-handle:nth-child(1):after {\n    border-top-left-radius: 3px;\n    border-bottom-left-radius: 3px; }\n  .anim-panel__slider-range-handle:nth-child(2) {\n    right: 0; }\n    .anim-panel__slider-range-handle:nth-child(2):after {\n      border-top-right-radius: 3px;\n      border-bottom-right-radius: 3px; }\n\n.anim-panel__slider-range-span {\n  display: block;\n  background-color: #0085a1;\n  height: 6px;\n  pointer-events: none;\n  position: absolute;\n  top: 18px;\n  left: 18px;\n  border-radius: 3px; }\n  .anim-panel__slider-range-span + .anim-panel__slider-range-span {\n    left: auto;\n    right: 18px; }\n\n.anim-panel__slider:hover .anim-panel__slider-playhead:before {\n  transform: scale(2.5); }\n", ""]);
 
 	// exports
 
@@ -2750,16 +2755,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	  //////////////////////////////////////////////////////////////////////
 	 
 	  var self = {
-	    sliderSelector: '.js-anim-panel-slider',
 	    sliderTrackSelector: '.js-anim-panel-slider-track',
 	    sliderPlayheadSelector: '.js-anim-panel-slider-playhead',
 	    sliderRangeSelector: '.js-slider-range',
-	    showRangeActiveClass: 'is-active',
 	    sliderRangeStartSelector: '.js-anim-panel-slider-range-handle-start',
 	    sliderRangeEndSelector: '.js-anim-panel-slider-range-handle-end',
 	    rangeSpanBeforeSelector: '.js-anim-panel-slider-range-before',
 	    rangeSpanAfterSelector: '.js-anim-panel-slider-range-after',
 	    toggleRangeSelector: '.js-range-toggle',
+
+	    sliderTrackEl: null,
+	    sliderPlayheadEl: null,
+	    sliderRangeEl: null,
+	    sliderRangeStartEl: null,
+	    sliderRangeEndEl: null,
+	    rangeSpanBeforeEl: null,
+	    rangeSpanAfterEl: null,
+	    toggleRangeEl: null,
+
+	    showRangeActiveClass: 'is-active',
+	    rangeGap: 7,
 	    draggablePlayhead: null,
 	    isDragging: false,
 	    loopIn: null,
@@ -2774,10 +2789,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  //////////////////////////////////////////////////////////////////////
 	 
 	  var _init = function() {
+	    _assignVariables();
 	    _createDraggables();
 	    _addEventListeners();
 	    _setIsShowingRange();
 	    _setLoop();
+	  };
+
+	  var _assignVariables = function() {
+	    self.sliderTrackEl = document.querySelector(self.sliderTrackSelector);
+	    self.sliderPlayheadEl = document.querySelector(self.sliderPlayheadSelector);
+	    self.sliderRangeEl = document.querySelector(self.sliderRangeSelector);
+	    self.sliderRangeStartEl = document.querySelector(self.sliderRangeStartSelector);
+	    self.sliderRangeEndEl = document.querySelector(self.sliderRangeEndSelector);
+	    self.rangeSpanBeforeEl = document.querySelector(self.rangeSpanBeforeSelector);
+	    self.rangeSpanAfterEl = document.querySelector(self.rangeSpanAfterSelector);
+	    self.toggleRangeEl = document.querySelector(self.toggleRangeSelector);
 	  };
 
 	  var _createDraggables = function() {
@@ -2826,8 +2853,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      timeline.seek(self.loopOut);
 	    });
 
-	    document.querySelector(self.sliderTrackSelector).addEventListener('click', _trackClicked.bind(self));
-	    document.querySelector(self.toggleRangeSelector).addEventListener('click', self.toggleRange);
+	    self.sliderTrackEl.addEventListener('click', _trackClicked.bind(self));
+	    self.toggleRangeEl.addEventListener('click', self.toggleRange);
 	  };
 
 	  var _setIsShowingRange = function() {
@@ -2839,11 +2866,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  var _trackClicked = function(evt) {
-	    if (evt.target === document.querySelector(self.sliderPlayheadSelector)) return;
-	    if (evt.target === document.querySelector(self.sliderRangeStartSelector)) return;
-	    if (evt.target === document.querySelector(self.sliderRangeEndSelector)) return;
+	    if (evt.target === self.sliderPlayheadEl) return;
+	    if (evt.target === self.sliderRangeStartEl) return;
+	    if (evt.target === self.sliderRangeEndEl) return;
 
-	    var playheadWidth = document.querySelector(self.sliderPlayheadSelector).offsetWidth;
+	    var playheadWidth = self.sliderPlayheadEl.offsetWidth;
 	    var clickPos = evt.offsetX - playheadWidth / 2;
 	    var progressPercentage = clickPos / _getMaxPlayheadPosition() * 100;
 	    self.setPercentage(progressPercentage);
@@ -2852,15 +2879,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  var _getMaxPlayheadPosition = function() {
-	    var playheadWidth = document.querySelector(self.sliderPlayheadSelector).offsetWidth;
-	    var trackWidth = document.querySelector(self.sliderTrackSelector).offsetWidth;
+	    var playheadWidth = self.sliderPlayheadEl.offsetWidth;
+	    var trackWidth = self.sliderTrackEl.offsetWidth;
 	    var max = trackWidth - playheadWidth;
 	    return max;
 	  };
 
 	  var _getMaxRangePosition = function() {
-	    var rangeWidth = document.querySelector(self.sliderRangeStartSelector).offsetWidth;
-	    var trackWidth = document.querySelector(self.sliderTrackSelector).offsetWidth;
+	    var rangeWidth = self.sliderRangeStartEl.offsetWidth;
+	    var trackWidth = self.sliderTrackEl.offsetWidth;
 	    var max = trackWidth - rangeWidth;
 	    return max;
 	  };
@@ -2909,8 +2936,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var _updateRangePositions = function() {
 	    var startPosition = _getRangeHandlePositionFromTime(self.loopIn);
 	    var endPosition = _getRangeHandlePositionFromTime(self.loopOut);
-	    var rangeStartEl = document.querySelector(self.sliderRangeStartSelector);
-	    var rangeEndEl = document.querySelector(self.sliderRangeEndSelector);
+	    var rangeStartEl = self.sliderRangeStartEl;
+	    var rangeEndEl = self.sliderRangeEndEl;
 
 	    self.draggableStart.position.x = startPosition;
 	    rangeStartEl.style.left = startPosition + 'px';
@@ -2932,16 +2959,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  var _updateRangeSpans = function() {
-	    var rangeHandleWidth = document.querySelector(self.sliderRangeEndSelector).offsetWidth;
-	    var maxWidth = document.querySelector(self.sliderTrackSelector).offsetWidth;
+	    var rangeHandleWidth = self.sliderRangeEndEl.offsetWidth;
+	    var maxWidth = self.sliderTrackEl.offsetWidth;
 	    var beforeDecimal = (self.loopIn) / timeline.totalDuration();
 	    var afterDecimal = 1 - ((self.loopOut) / timeline.totalDuration());
 	    var beforeWidth = (beforeDecimal * maxWidth) - rangeHandleWidth;
 	    var afterWidth = (afterDecimal * maxWidth) - rangeHandleWidth;
 	    if (beforeWidth < 0) beforeWidth = 0;
 	    if (afterWidth < 0) afterWidth = 0;
-	    document.querySelector(self.rangeSpanBeforeSelector).style.width = beforeWidth + (beforeWidth > 0 ? 'px' : '');
-	    document.querySelector(self.rangeSpanAfterSelector).style.width = afterWidth + (beforeWidth > 0 ? 'px' : '');
+	    self.rangeSpanBeforeEl.style.width = beforeWidth + (beforeWidth > 0 ? 'px' : '');
+	    self.rangeSpanAfterEl.style.width = afterWidth + (beforeWidth > 0 ? 'px' : '');
 	  };
 	 
 	 
@@ -2953,7 +2980,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  
 	  self.setPercentage = function(percentage) {
 	    var max = _getMaxPlayheadPosition();
-	    var playheadEl = document.querySelector(self.sliderPlayheadSelector);
+	    var playheadEl = self.sliderPlayheadEl;
 	    var position = max * (percentage / 100);
 	    self.draggablePlayhead.position.x = position;
 	    playheadEl.style.left = position + 'px';
@@ -2963,11 +2990,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    self.isShowingRange = !self.isShowingRange;
 	    localforage.setItem('isShowingRange', self.isShowingRange, function(err, val) {});
 	    if (self.isShowingRange) {
-	      document.querySelector(self.sliderRangeSelector).classList.add(self.showRangeActiveClass);
-	      document.querySelector(self.toggleRangeSelector).classList.add(self.showRangeActiveClass);
+	      self.sliderRangeEl.classList.add(self.showRangeActiveClass);
+	      self.toggleRangeEl.classList.add(self.showRangeActiveClass);
 	    } else {
-	      document.querySelector(self.sliderRangeSelector).classList.remove(self.showRangeActiveClass);
-	      document.querySelector(self.toggleRangeSelector).classList.remove(self.showRangeActiveClass);
+	      self.sliderRangeEl.classList.remove(self.showRangeActiveClass);
+	      self.toggleRangeEl.classList.remove(self.showRangeActiveClass);
 	    }
 	    _updateRangeSpans();
 	  }

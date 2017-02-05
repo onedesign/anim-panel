@@ -176,6 +176,11 @@ module.exports = function(timeline, options) {
           self.progress.updateStyles();
         });
 
+        // Expanding the range on either side
+        self.combokeys.bind(['option+up'], self.progress.expandRange);
+        self.combokeys.bind(['option+down'], self.progress.contractRange);
+        
+
         // Jumping in time
         self.combokeys.bind(['option+right', 'pagedown'], self.jumpForward.bind(self, 1));
         self.combokeys.bind(['option+left', 'pageup'], self.jumpBackward.bind(self, 1));

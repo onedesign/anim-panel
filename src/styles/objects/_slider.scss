@@ -4,7 +4,8 @@
 
 $slider-track-height: 42px;
 $slider-bar-height: 6px;
-$slider-range-handle-width: 6px;
+$slider-range-handle-width: 28px;
+$slider-range-handle-width-inner: 6px;
 $slider-track-margins: 18px;
 $debug: false;
 
@@ -69,30 +70,21 @@ $debug: false;
       position: absolute;
       top: 9px;
       cursor: pointer;
-      @if $debug { background-color: rgba(lime, 0.8); }
+      @if $debug { background-color: rgba(lime, 0.7); }
 
       &:after {
         content: "";
         display: block;
         position: absolute;
-        width: $slider-range-handle-width;
+        width: $slider-range-handle-width-inner;
         height: 24px;
         background-color: $color-range;
-      }
-
-      &:before {
-        content: "";
-        display: block;
-        position: absolute;
-        width: 16px;
-        height: 24px;
-        background-color: transparent;
+        left: 11px;
       }
 
       &:nth-child(1) {
 
         &:after {
-          left: 10px;
           border-top-left-radius: 3px;
           border-bottom-left-radius: 3px;
         }
@@ -102,13 +94,8 @@ $debug: false;
         right: 0;
 
         &:after {
-          right: 10px;
           border-top-right-radius: 3px;
           border-bottom-right-radius: 3px;
-        }
-
-        &:before {
-          right: 0;
         }
       }
     }
