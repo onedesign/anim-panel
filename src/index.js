@@ -49,7 +49,18 @@ module.exports = function(timeline, options) {
       }
      
       self.settings = mergeOpts({
-        
+        shortcuts: {
+          togglePlay: 'space',
+          setRangeStart: 'b',
+          setRangeEnd: 'n',
+          toggleRange: 'shift+space',
+          clearRange: 'shift+x',
+          jumpForward: ['option+right', 'pagedown'],
+          jumpBackward: ['option+left', 'pageup'],
+          jumpForwardBig: ['shift+option+right', 'shift+pagedown'],
+          jumpBackwardBig: ['shift+option+left', 'shift+pageup'],
+          jumpToStart: ['return', 'enter']
+        }
       }, options);
      
      
@@ -150,7 +161,7 @@ module.exports = function(timeline, options) {
 
       var _bindShortcuts = function() {
         // Play/Pause
-        self.combokeys.bind('space', self.togglePlay);
+        self.combokeys.bind(self.settings.shortcuts.togglePlay, self.togglePlay);
 
         // Timescale
         for (var idx = 0, length = self.timescales.length; idx < length; idx++) {
@@ -158,32 +169,32 @@ module.exports = function(timeline, options) {
         }
 
         // Changing Range Start/End
-        self.combokeys.bind('b', function() { 
+        self.combokeys.bind(self.settings.shortcuts.setRangeStart, function() { 
           self.progress.setLoopIn(timeline.time());
           self.progress.updateStyles();
         });
-        self.combokeys.bind('n', function() { 
+        self.combokeys.bind(self.settings.shortcuts.setRangeEnd, function() { 
           self.progress.setLoopOut(timeline.time());
           self.progress.updateStyles();
         });
 
         // Showing/Hiding Range
-        self.combokeys.bind('shift+space', self.progress.toggleRange);
+        self.combokeys.bind(self.settings.shortcuts.toggleRange, self.progress.toggleRange);
 
         // Clearing Range
-        self.combokeys.bind('shift+x', function() {
+        self.combokeys.bind(self.settings.shortcuts.clearRange, function() {
           self.progress.clearRange();
           self.progress.updateStyles();
         });
 
         // Jumping in time
-        self.combokeys.bind(['option+right', 'pagedown'], self.jumpForward.bind(self, 1));
-        self.combokeys.bind(['option+left', 'pageup'], self.jumpBackward.bind(self, 1));
-        self.combokeys.bind(['shift+option+right', 'shift+pagedown'], self.jumpForward.bind(self, 10));
-        self.combokeys.bind(['shift+option+left', 'shift+pageup'], self.jumpBackward.bind(self, 10));
+        self.combokeys.bind(self.settings.shortcuts.jumpForward, self.jumpForward.bind(self, 1));
+        self.combokeys.bind(self.settings.shortcuts.jumpBackward, self.jumpBackward.bind(self, 1));
+        self.combokeys.bind(self.settings.shortcuts.jumpForwardBig, self.jumpForward.bind(self, 10));
+        self.combokeys.bind(self.settings.shortcuts.jumpBackwardBig, self.jumpBackward.bind(self, 10));
 
         // Restart timeline
-        self.combokeys.bind(['return', 'enter'], self.gotoStart);
+        self.combokeys.bind(self.settings.shortcuts.jumpToStart, self.gotoStart);
       };
 
       var _toggleDropdown = function(evt) {
