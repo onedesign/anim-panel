@@ -200,7 +200,7 @@ module.exports = function(timeline, options) {
   var _getRangeHandlePositionFromTime = function(time) {
     var timePercentage = time / timeline.totalDuration();
     var position = timePercentage * _getMaxRangePosition();
-    return position;
+    return position; 
   };
 
   var _updateRangeSpans = function() {
@@ -245,6 +245,7 @@ module.exports = function(timeline, options) {
       self.sliderRangeEl.classList.remove(self.showRangeActiveClass);
       self.toggleRangeEl.classList.remove(self.showRangeActiveClass);
     }
+    _updateRangePositions();
     _updateRangeSpans();
   }
 
