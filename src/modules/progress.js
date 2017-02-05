@@ -1,5 +1,4 @@
 var Draggabilly = require('draggabilly');
-var localforage = require('localforage');
 
 module.exports = function(timeline, options) {
   //
@@ -89,11 +88,9 @@ module.exports = function(timeline, options) {
   };
 
   var _setIsShowingRange = function() {
-    localforage.getItem('isShowingRange', function(err, val) {
-      if (val) {
-        self.toggleRange();
-      }
-    });
+    if (localStorage.getItem('isShowingRange')) {
+      self.toggleRange();
+    }
   };
 
   var _trackClicked = function(evt) {
@@ -145,23 +142,17 @@ module.exports = function(timeline, options) {
     _setLoopDefaults();
 
     // Check for local storage values
-    localforage.getItem('loopIn', function(err, val) {
-      if (val) {
-        if (val < 0) val = 0;
-        self.loopIn = val;
-        if (self.isShowingRange) timeline.time(self.loopIn);
-        _updateRangePositions();
-        _updateRangeSpans();
-      }
-    });
-    localforage.getItem('loopOut', function(err, val) {
-      if (val) {
-        if (val > timeline.totalDuration()) val = timeline.totalDuration();
-        self.loopOut = val;
-        _updateRangePositions();
-        _updateRangeSpans();
-      }
-    });
+    var loopIn = localStorage.getItem('loopIn');
+    if (loopIn < 0) loopIn = 0;
+    self.loopIn = loopIn;
+    if (self.isShowingRange) timeline.time(self.loopIn);
+
+    var loopOut = localStorage.getItem('loopOut');
+    if (loopOut > timeline.totalDuration()) loopOut = timeline.totalDuration();
+    self.loopOut = loopOut;
+
+    _updateRangePositions();
+    _updateRangeSpans();
   };
 
   var _updateRangePositions = function() {
@@ -219,7 +210,7 @@ module.exports = function(timeline, options) {
 
   self.toggleRange = function() {
     self.isShowingRange = !self.isShowingRange;
-    localforage.setItem('isShowingRange', self.isShowingRange, function(err, val) {});
+    localStorage.setItem('isShowingRange', self.isShowingRange);
     if (self.isShowingRange) {
       document.querySelector(self.sliderRangeSelector).classList.add(self.showRangeActiveClass);
       document.querySelector(self.toggleRangeSelector).classList.add(self.showRangeActiveClass);
@@ -232,7 +223,7 @@ module.exports = function(timeline, options) {
 
   self.setLoopIn = function(time) {
     if (time < 0) time = 0;
-    localforage.setItem('loopIn', time, function(err, val) {});
+    localStorage.setItem('loopIn', time);
     self.loopIn = time;
     _updateRangeSpans();
     console.log('Loop In Set: ', time);
@@ -240,7 +231,7 @@ module.exports = function(timeline, options) {
 
   self.setLoopOut = function(time) {
     if (time > timeline.totalDuration()) time = timeline.totalDuration();
-    localforage.setItem('loopOut', time, function(err, val) {});
+    localStorage.setItem('loopOut', time);
     self.loopOut = time;
     _updateRangeSpans();
     console.log('Loop Out Set: ', time);

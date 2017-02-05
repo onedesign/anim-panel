@@ -16,14 +16,14 @@
   "homepage": "https://github.com/onedesign/anim-panel",
   "dependencies": {
     "combokeys": "^2.4.6",
-    "draggabilly": "^2.1.1",
-    "localforage": "^1.4.2"
+    "draggabilly": "^2.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.0",
     "browser-sync": "^2.14.0",
     "css-loader": "^0.23.1",
     "html-loader": "^0.4.3",
+    "jest": "^18.1.0",
     "node-sass": "^4.4.0",
     "postcss-loader": "^1.2.2",
     "sass-loader": "^4.1.1",
@@ -31,7 +31,8 @@
     "webpack": "^1.13.1"
   },
   "scripts": {
-    "start": "webpack --watch & browser-sync start --config bs-config.js",
+    "start": "webpack --watch & browser-sync start --config bs-config.js & jest --watchAll",
+    "test": "jest",
     "build": "webpack"
   }
 }

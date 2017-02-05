@@ -440,9 +440,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var require;var require;/* WEBPACK VAR INJECTION */(function(global) {/*!
 	    localForage -- Offline Storage, Improved
-	    Version 1.4.2
+	    Version 1.4.3
 	    https://mozilla.github.io/localForage
-	    (c) 2013-2015 Mozilla, Apache License 2.0
+	    (c) 2013-2016 Mozilla, Apache License 2.0
 	*/
 	(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.localforage = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw (f.code="MODULE_NOT_FOUND", f)}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 	'use strict';
@@ -783,27 +783,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	},{"1":1}],4:[function(_dereq_,module,exports){
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function getIDB() {
 	    /* global indexedDB,webkitIndexedDB,mozIndexedDB,OIndexedDB,msIndexedDB */
-	    if (typeof indexedDB !== 'undefined') {
-	        return indexedDB;
-	    }
-	    if (typeof webkitIndexedDB !== 'undefined') {
-	        return webkitIndexedDB;
-	    }
-	    if (typeof mozIndexedDB !== 'undefined') {
-	        return mozIndexedDB;
-	    }
-	    if (typeof OIndexedDB !== 'undefined') {
-	        return OIndexedDB;
-	    }
-	    if (typeof msIndexedDB !== 'undefined') {
-	        return msIndexedDB;
-	    }
+	    try {
+	        if (typeof indexedDB !== 'undefined') {
+	            return indexedDB;
+	        }
+	        if (typeof webkitIndexedDB !== 'undefined') {
+	            return webkitIndexedDB;
+	        }
+	        if (typeof mozIndexedDB !== 'undefined') {
+	            return mozIndexedDB;
+	        }
+	        if (typeof OIndexedDB !== 'undefined') {
+	            return OIndexedDB;
+	        }
+	        if (typeof msIndexedDB !== 'undefined') {
+	            return msIndexedDB;
+	        }
+	    } catch (e) {}
 	}
 
 	var idb = getIDB();
@@ -893,12 +895,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}
 
+	function executeTwoCallbacks(promise, callback, errorCallback) {
+	    if (typeof callback === 'function') {
+	        promise.then(callback);
+	    }
+
+	    if (typeof errorCallback === 'function') {
+	        promise["catch"](errorCallback);
+	    }
+	}
+
 	// Some code originally from async_storage.js in
 	// [Gaia](https://github.com/mozilla-b2g/gaia).
 
 	var DETECT_BLOB_SUPPORT_STORE = 'local-forage-detect-blob-support';
 	var supportsBlobs;
 	var dbContexts;
+	var toString = Object.prototype.toString;
 
 	// Transform a binary string to an array buffer, because otherwise
 	// weird stuff happens when you try to work with the binary string directly.
@@ -1138,7 +1151,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    });
 
-	    promise.then(callback, callback);
+	    executeTwoCallbacks(promise, callback, callback);
 	    return promise;
 	}
 
@@ -1329,7 +1342,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var dbInfo;
 	        self.ready().then(function () {
 	            dbInfo = self._dbInfo;
-	            if (value instanceof Blob) {
+	            if (toString.call(value) === '[object Blob]') {
 	                return _checkBlobSupport(dbInfo.db).then(function (blobSupport) {
 	                    if (blobSupport) {
 	                        return value;
@@ -1589,6 +1602,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var TYPE_FLOAT64ARRAY = 'fl64';
 	var TYPE_SERIALIZED_MARKER_LENGTH = SERIALIZED_MARKER_LENGTH + TYPE_ARRAYBUFFER.length;
 
+	var toString$1 = Object.prototype.toString;
+
 	function stringToBuffer(serializedString) {
 	    // Fill the string into a ArrayBuffer.
 	    var bufferLength = serializedString.length * 0.75;
@@ -1650,16 +1665,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	// instructs the `setItem()` callback/promise to be executed). This is how
 	// we store binary data with localStorage.
 	function serialize(value, callback) {
-	    var valueString = '';
+	    var valueType = '';
 	    if (value) {
-	        valueString = value.toString();
+	        valueType = toString$1.call(value);
 	    }
 
 	    // Cannot use `value instanceof ArrayBuffer` or such here, as these
 	    // checks fail when running the tests using casper.js...
 	    //
 	    // TODO: See why those tests fail and use a better solution.
-	    if (value && (value.toString() === '[object ArrayBuffer]' || value.buffer && value.buffer.toString() === '[object ArrayBuffer]')) {
+	    if (value && (valueType === '[object ArrayBuffer]' || value.buffer && toString$1.call(value.buffer) === '[object ArrayBuffer]')) {
 	        // Convert binary arrays to a string and prefix the string with
 	        // a special marker.
 	        var buffer;
@@ -1671,23 +1686,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            buffer = value.buffer;
 
-	            if (valueString === '[object Int8Array]') {
+	            if (valueType === '[object Int8Array]') {
 	                marker += TYPE_INT8ARRAY;
-	            } else if (valueString === '[object Uint8Array]') {
+	            } else if (valueType === '[object Uint8Array]') {
 	                marker += TYPE_UINT8ARRAY;
-	            } else if (valueString === '[object Uint8ClampedArray]') {
+	            } else if (valueType === '[object Uint8ClampedArray]') {
 	                marker += TYPE_UINT8CLAMPEDARRAY;
-	            } else if (valueString === '[object Int16Array]') {
+	            } else if (valueType === '[object Int16Array]') {
 	                marker += TYPE_INT16ARRAY;
-	            } else if (valueString === '[object Uint16Array]') {
+	            } else if (valueType === '[object Uint16Array]') {
 	                marker += TYPE_UINT16ARRAY;
-	            } else if (valueString === '[object Int32Array]') {
+	            } else if (valueType === '[object Int32Array]') {
 	                marker += TYPE_INT32ARRAY;
-	            } else if (valueString === '[object Uint32Array]') {
+	            } else if (valueType === '[object Uint32Array]') {
 	                marker += TYPE_UINT32ARRAY;
-	            } else if (valueString === '[object Float32Array]') {
+	            } else if (valueType === '[object Float32Array]') {
 	                marker += TYPE_FLOAT32ARRAY;
-	            } else if (valueString === '[object Float64Array]') {
+	            } else if (valueType === '[object Float64Array]') {
 	                marker += TYPE_FLOAT64ARRAY;
 	            } else {
 	                callback(new Error('Failed to get type for BinaryArray'));
@@ -1695,7 +1710,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        callback(marker + bufferToString(buffer));
-	    } else if (valueString === '[object Blob]') {
+	    } else if (valueType === '[object Blob]') {
 	        // Conver the blob to a binaryArray and then to a string.
 	        var fileReader = new FileReader();
 
@@ -2366,16 +2381,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    keys: keys$2
 	};
 
-	function executeTwoCallbacks(promise, callback, errorCallback) {
-	    if (typeof callback === 'function') {
-	        promise.then(callback);
-	    }
-
-	    if (typeof errorCallback === 'function') {
-	        promise["catch"](errorCallback);
-	    }
-	}
-
 	// Custom drivers are stored here when `defineDriver()` is called.
 	// They are shared across all instances of localForage.
 	var CustomDrivers = {};
@@ -2741,7 +2746,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var Draggabilly = __webpack_require__(6);
-	var localforage = __webpack_require__(4);
 
 	module.exports = function(timeline, options) {
 	  //
@@ -2831,11 +2835,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  var _setIsShowingRange = function() {
-	    localforage.getItem('isShowingRange', function(err, val) {
-	      if (val) {
-	        self.toggleRange();
-	      }
-	    });
+	    if (localStorage.getItem('isShowingRange')) {
+	      self.toggleRange();
+	    }
 	  };
 
 	  var _trackClicked = function(evt) {
@@ -2887,23 +2889,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _setLoopDefaults();
 
 	    // Check for local storage values
-	    localforage.getItem('loopIn', function(err, val) {
-	      if (val) {
-	        if (val < 0) val = 0;
-	        self.loopIn = val;
-	        if (self.isShowingRange) timeline.time(self.loopIn);
-	        _updateRangePositions();
-	        _updateRangeSpans();
-	      }
-	    });
-	    localforage.getItem('loopOut', function(err, val) {
-	      if (val) {
-	        if (val > timeline.totalDuration()) val = timeline.totalDuration();
-	        self.loopOut = val;
-	        _updateRangePositions();
-	        _updateRangeSpans();
-	      }
-	    });
+	    var loopIn = localStorage.getItem('loopIn');
+	    if (loopIn < 0) loopIn = 0;
+	    self.loopIn = loopIn;
+	    if (self.isShowingRange) timeline.time(self.loopIn);
+
+	    var loopOut = localStorage.getItem('loopOut');
+	    if (loopOut > timeline.totalDuration()) loopOut = timeline.totalDuration();
+	    self.loopOut = loopOut;
+
+	    _updateRangePositions();
+	    _updateRangeSpans();
 	  };
 
 	  var _updateRangePositions = function() {
@@ -2961,7 +2957,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  self.toggleRange = function() {
 	    self.isShowingRange = !self.isShowingRange;
-	    localforage.setItem('isShowingRange', self.isShowingRange, function(err, val) {});
+	    localStorage.setItem('isShowingRange', self.isShowingRange);
 	    if (self.isShowingRange) {
 	      document.querySelector(self.sliderRangeSelector).classList.add(self.showRangeActiveClass);
 	      document.querySelector(self.toggleRangeSelector).classList.add(self.showRangeActiveClass);
@@ -2974,7 +2970,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  self.setLoopIn = function(time) {
 	    if (time < 0) time = 0;
-	    localforage.setItem('loopIn', time, function(err, val) {});
+	    localStorage.setItem('loopIn', time);
 	    self.loopIn = time;
 	    _updateRangeSpans();
 	    console.log('Loop In Set: ', time);
@@ -2982,7 +2978,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  self.setLoopOut = function(time) {
 	    if (time > timeline.totalDuration()) time = timeline.totalDuration();
-	    localforage.setItem('loopOut', time, function(err, val) {});
+	    localStorage.setItem('loopOut', time);
 	    self.loopOut = time;
 	    _updateRangeSpans();
 	    console.log('Loop Out Set: ', time);
