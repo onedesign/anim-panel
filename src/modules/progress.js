@@ -179,17 +179,23 @@ module.exports = function(timeline, options) {
   };
 
   var _updateRangePositions = function() {
-    var startPosition = _getRangeHandlePositionFromTime(self.loopIn);
-    var endPosition = _getRangeHandlePositionFromTime(self.loopOut);
-    var rangeStartEl = self.sliderRangeStartEl;
-    var rangeEndEl = self.sliderRangeEndEl;
+    _updateRangeStartPosition();
+    _updateRangeEndPosition();
+  };
 
+  var _updateRangeStartPosition = function() {
+    var startPosition = _getRangeHandlePositionFromTime(self.loopIn);
+    var rangeStartEl = self.sliderRangeStartEl;
     self.draggableStart.position.x = startPosition;
     rangeStartEl.style.left = startPosition + 'px';
+  }
 
+  var _updateRangeEndPosition = function() {
+    var endPosition = _getRangeHandlePositionFromTime(self.loopOut);
+    var rangeEndEl = self.sliderRangeEndEl;
     self.draggableEnd.position.x = endPosition;
     rangeEndEl.style.left = endPosition + 'px';
-  };
+  }
 
   var _setLoopDefaults = function(evt) {
     self.loopIn = 0;
@@ -250,7 +256,10 @@ module.exports = function(timeline, options) {
   }
 
   self.setLoopIn = function(time) {
-    if (time >= self.loopOut) time = self.loopOut - 0.1;
+    if (time >= self.loopOut) {
+      self.setLoopOut(time + 0.1);
+      _updateRangeEndPosition();
+    }
     if (time < 0) time = 0;
     localStorage.setItem('loopIn', time);
     self.loopIn = time;
@@ -259,7 +268,10 @@ module.exports = function(timeline, options) {
   };
 
   self.setLoopOut = function(time) {
-    if (time <= self.loopIn) time = self.loopIn + 0.1;
+    if (time <= self.loopIn) {
+      self.setLoopIn(time - 0.1);
+      _updateRangeStartPosition();
+    };
     if (time > timeline.totalDuration()) time = timeline.totalDuration();
     localStorage.setItem('loopOut', time);
     self.loopOut = time;
