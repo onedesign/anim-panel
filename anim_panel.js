@@ -237,6 +237,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        self.combokeys.bind(['option+left', 'pageup'], self.jumpBackward.bind(self, 1));
 	        self.combokeys.bind(['shift+option+right', 'shift+pagedown'], self.jumpForward.bind(self, 10));
 	        self.combokeys.bind(['shift+option+left', 'shift+pageup'], self.jumpBackward.bind(self, 10));
+
+	        // Restart timeline
+	        self.combokeys.bind(['return', 'enter'], self.gotoStart);
 	      };
 
 	      var _toggleDropdown = function(evt) {
