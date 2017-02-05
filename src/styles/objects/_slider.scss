@@ -4,7 +4,9 @@
 
 $slider-track-height: 42px;
 $slider-bar-height: 6px;
+$slider-range-handle-width: 6px;
 $slider-track-margins: 18px;
+$debug: false;
 
 .anim-panel__slider {
 
@@ -14,6 +16,7 @@ $slider-track-margins: 18px;
     width: 100%;
     height: $slider-track-height;
     position: relative;
+    @if $debug { background-color: rgba(cyan, 0.2); }
 
     &:before {
       content: "";
@@ -34,6 +37,7 @@ $slider-track-margins: 18px;
       display: block;
       position: relative;
       cursor: pointer;
+      @if $debug { background-color: rgba(cyan, 0.3); }
 
       &:before {
         content: "";
@@ -59,18 +63,19 @@ $slider-track-margins: 18px;
     }
 
     .anim-panel__slider-range-handle {
-      width: $slider-bar-height;
+      width: $slider-range-handle-width;
       height: 24px;
       display: block;
       position: absolute;
-      top: 8px;
+      top: 9px;
       cursor: pointer;
+      @if $debug { background-color: rgba(lime, 0.8); }
 
       &:after {
         content: "";
         display: block;
         position: absolute;
-        width: $slider-bar-height;
+        width: $slider-range-handle-width;
         height: 24px;
         background-color: $color-range;
       }
