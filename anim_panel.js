@@ -117,7 +117,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          jumpBackwardBig: ['shift+option+left', 'shift+pageup'],
 	          jumpToStart: ['return', 'enter'],
 	          expandRange: ['option+up'],
-	          contractRange: ['option+down']
+	          contractRange: ['option+down'],
+	          expandRangeBig: ['shift+option+up'],
+	          contractRangeBig: ['shift+option+down']
 	        }
 	      }, options);
 	     
@@ -246,8 +248,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 
 	        // Expanding the range on either side
-	        self.combokeys.bind(self.settings.shortcuts.expandRange, self.progress.expandRange);
-	        self.combokeys.bind(self.settings.shortcuts.contractRange, self.progress.contractRange);
+	        self.combokeys.bind(self.settings.shortcuts.expandRange, self.progress.expandRange.bind(self, 1));
+	        self.combokeys.bind(self.settings.shortcuts.contractRange, self.progress.contractRange.bind(self, 1));
+	        self.combokeys.bind(self.settings.shortcuts.expandRangeBig, self.progress.expandRange.bind(self, 10));
+	        self.combokeys.bind(self.settings.shortcuts.contractRangeBig, self.progress.contractRange.bind(self, 10));
 
 	        // Jumping in time
 	        self.combokeys.bind(self.settings.shortcuts.jumpForward, self.jumpForward.bind(self, 1));
@@ -3043,15 +3047,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    self.setLoopOut(timeline.totalDuration());
 	  }
 	  
-	  self.expandRange = function() {
-	    self.setLoopIn(self.loopIn - 0.1);
-	    self.setLoopOut(self.loopOut + 0.1);
+	  self.expandRange = function(units) {
+	    var unit = 0.1;
+	    var units = (typeof units === 'number' ? units : 1);
+	    var amount = unit * units;
+	    self.setLoopIn(self.loopIn - amount);
+	    self.setLoopOut(self.loopOut + amount);
 	    self.updateStyles();
 	  }
 	  
-	  self.contractRange = function() {
-	    self.setLoopIn(self.loopIn + 0.1);
-	    self.setLoopOut(self.loopOut - 0.1);
+	  self.contractRange = function(units) {
+	    var unit = 0.1;
+	    var units = (typeof units === 'number' ? units : 1);
+	    var amount = unit * units;
+	    self.setLoopIn(self.loopIn + amount);
+	    self.setLoopOut(self.loopOut - amount);
 	    self.updateStyles();
 	  }
 	 

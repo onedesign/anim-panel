@@ -276,15 +276,21 @@ module.exports = function(timeline, options) {
     self.setLoopOut(timeline.totalDuration());
   }
   
-  self.expandRange = function() {
-    self.setLoopIn(self.loopIn - 0.1);
-    self.setLoopOut(self.loopOut + 0.1);
+  self.expandRange = function(units) {
+    var unit = 0.1;
+    var units = (typeof units === 'number' ? units : 1);
+    var amount = unit * units;
+    self.setLoopIn(self.loopIn - amount);
+    self.setLoopOut(self.loopOut + amount);
     self.updateStyles();
   }
   
-  self.contractRange = function() {
-    self.setLoopIn(self.loopIn + 0.1);
-    self.setLoopOut(self.loopOut - 0.1);
+  self.contractRange = function(units) {
+    var unit = 0.1;
+    var units = (typeof units === 'number' ? units : 1);
+    var amount = unit * units;
+    self.setLoopIn(self.loopIn + amount);
+    self.setLoopOut(self.loopOut - amount);
     self.updateStyles();
   }
  
