@@ -59,7 +59,9 @@ module.exports = function(timeline, options) {
           jumpBackward: ['option+left', 'pageup'],
           jumpForwardBig: ['shift+option+right', 'shift+pagedown'],
           jumpBackwardBig: ['shift+option+left', 'shift+pageup'],
-          jumpToStart: ['return', 'enter']
+          jumpToStart: ['return', 'enter'],
+          expandRange: ['option+up'],
+          contractRange: ['option+down']
         }
       }, options);
      
@@ -188,8 +190,8 @@ module.exports = function(timeline, options) {
         });
 
         // Expanding the range on either side
-        self.combokeys.bind(['option+up'], self.progress.expandRange);
-        self.combokeys.bind(['option+down'], self.progress.contractRange);
+        self.combokeys.bind(self.settings.shortcuts.expandRange, self.progress.expandRange);
+        self.combokeys.bind(self.settings.shortcuts.contractRange, self.progress.contractRange);
 
         // Jumping in time
         self.combokeys.bind(self.settings.shortcuts.jumpForward, self.jumpForward.bind(self, 1));
