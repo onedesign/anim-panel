@@ -55,3 +55,7 @@ new AnimPanel(tl);
 `npm start`: Automatically builds on file change and starts a live reload server with an example at [http://localhost:3000/example/](http://localhost:3000/example/)
 
 `npm run build`: Builds production-ready files
+
+## Changelog
+
+See the [release page](https://github.com/onedesign/anim-panel/releases).
