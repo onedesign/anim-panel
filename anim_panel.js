@@ -2873,6 +2873,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    self.sliderTrackEl.addEventListener('click', _trackClicked.bind(self));
 	    self.toggleRangeEl.addEventListener('click', self.toggleRange);
+
+	    window.onresize = self.updateStyles;
 	  };
 
 	  var _setIsShowingRange = function() {
@@ -2968,14 +2970,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  var _updateRangeSpans = function() {
-	    var rangeHandleWidth = self.sliderRangeEndEl.offsetWidth;
+	    var rangeHandleOffset = 3;
+	    var rangeHandleWidth = self.sliderRangeStartEl.offsetWidth;
 	    var maxWidth = self.sliderTrackEl.offsetWidth;
-	    var beforeDecimal = (self.loopIn) / timeline.totalDuration();
-	    var afterDecimal = 1 - ((self.loopOut) / timeline.totalDuration());
-	    var beforeWidth = (beforeDecimal * maxWidth) - rangeHandleWidth;
-	    var afterWidth = (afterDecimal * maxWidth) - rangeHandleWidth;
+
+	    var beforeHandlePos = _getRangeHandlePositionFromTime(self.loopIn);
+	    var afterHandlePos = _getRangeHandlePositionFromTime(self.loopOut);
+
+	    var beforeWidth = beforeHandlePos - rangeHandleOffset;
+	    var afterWidth = maxWidth - (afterHandlePos + rangeHandleWidth + rangeHandleOffset);
 	    if (beforeWidth < 0) beforeWidth = 0;
 	    if (afterWidth < 0) afterWidth = 0;
+
 	    self.rangeSpanBeforeEl.style.width = beforeWidth + (beforeWidth > 0 ? 'px' : '');
 	    self.rangeSpanAfterEl.style.width = afterWidth + (beforeWidth > 0 ? 'px' : '');
 	  };
