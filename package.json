@@ -16,7 +16,8 @@
   "homepage": "https://github.com/onedesign/anim-panel",
   "dependencies": {
     "combokeys": "^2.4.6",
-    "draggabilly": "^2.1.1"
+    "draggabilly": "^2.1.1",
+    "lodash.defaultsdeep": "^4.6.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.0",

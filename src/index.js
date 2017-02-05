@@ -1,7 +1,7 @@
 var styles = require('css!sass!postcss!./styles/main.scss');
 var markup = require("html!./index.html");
-var localforage = require('localforage');
 var Progress = require('./modules/progress');
+var defaultsDeep = require('lodash.defaultsdeep');
 var Combokeys = require("combokeys");
 
 module.exports = function(timeline, options) {
@@ -41,14 +41,7 @@ module.exports = function(timeline, options) {
       //
       //////////////////////////////////////////////////////////////////////
 
-      var mergeOpts = function(obj1, obj2) {
-        var obj3 = {};
-        for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
-        for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
-        return obj3;
-      }
-     
-      self.settings = mergeOpts({
+      self.settings = defaultsDeep(options, {
         shortcuts: {
           togglePlay: 'space',
           setRangeStart: 'b',
@@ -65,7 +58,7 @@ module.exports = function(timeline, options) {
           expandRangeBig: ['shift+option+up'],
           contractRangeBig: ['shift+option+down']
         }
-      }, options);
+      });
      
      
       //
