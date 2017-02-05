@@ -2893,8 +2893,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  var _getProgressPercentage = function() {
-	    var max = _getMaxPlayheadPosition();
-	    return self.draggablePlayhead.position.x / max;
+	    return self.draggablePlayhead.position.x / _getMaxPlayheadPosition();
 	  };
 
 	  var _getTimeFromDraggablePosition = function(draggable) {
