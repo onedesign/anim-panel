@@ -52,6 +52,8 @@ module.exports = function(timeline, options) {
           jumpBackward: ['option+left', 'pageup'],
           jumpForwardBig: ['shift+option+right', 'shift+pagedown'],
           jumpBackwardBig: ['shift+option+left', 'shift+pageup'],
+          jumpForwardSmall: ['ctrl+option+right'],
+          jumpBackwardSmall: ['ctrl+option+left'],
           jumpToStart: ['return', 'enter'],
           expandRange: ['option+up'],
           contractRange: ['option+down'],
@@ -195,6 +197,8 @@ module.exports = function(timeline, options) {
         self.combokeys.bind(self.settings.shortcuts.jumpBackward, self.jumpBackward.bind(self, 1));
         self.combokeys.bind(self.settings.shortcuts.jumpForwardBig, self.jumpForward.bind(self, 10));
         self.combokeys.bind(self.settings.shortcuts.jumpBackwardBig, self.jumpBackward.bind(self, 10));
+        self.combokeys.bind(self.settings.shortcuts.jumpForwardSmall, self.jumpForward.bind(self, 0.333));
+        self.combokeys.bind(self.settings.shortcuts.jumpBackwardSmall, self.jumpBackward.bind(self, 0.333));
 
         // Restart timeline
         self.combokeys.bind(self.settings.shortcuts.jumpToStart, self.gotoStart);

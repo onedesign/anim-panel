@@ -69,6 +69,8 @@ AnimPanel includes keyboard-shorcuts for a variety of common actions.
 | Jump backward 0.1 seconds       | alt + left arrow or page up               |
 | Jump forward 1 second      | shift + alt + right arrow or shift + page down |
 | Jump backward 1 second     | shift + alt + left arrow or shift + page down  |
+| Jump forward 0.03 seconds       | control + alt + right arrow               |
+| Jump backward 0.03 seconds      | control + alt + left arrow                |
 | Jump to start of timeline/range | return or enter                           |
 | Expand range by 0.1 seconds     | alt + up arrow                            |
 | Contract range by 0.1 seconds   | alt + down arrow                          |
