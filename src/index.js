@@ -74,6 +74,7 @@ module.exports = function(timeline, options) {
         _addProgress();
         _addLabelButtons();
         _addEventListeners();
+        _addProxy();
         _updatePlayPauseState();
         _bindShortcuts();
       };
@@ -153,9 +154,10 @@ module.exports = function(timeline, options) {
           var timescale = timescaleLink.getAttribute('data-timescale');
           timescaleLink.addEventListener('click', _updateTimescale.bind(self, timescaleLink, timescale));
         }
+      };
 
-        // Listen for the playhead to change
-        timeline.eventCallback('onUpdate', _onTimelineUpdate.bind(self));
+      var _addProxy = function() {
+        timeline.to({}, timeline.duration(), { onUpdate: _onTimelineUpdate.bind(self) }, 0);
       };
 
       var _bindShortcuts = function() {

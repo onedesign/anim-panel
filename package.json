@@ -1,6 +1,6 @@
 {
   "name": "anim-panel",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A utility panel to make working with Greensock Animation Platform timeline animations easier.",
   "repository": {
     "type": "git",
